@@ -2,62 +2,59 @@
 import { ref, watch } from 'vue'
 import EditorField from './EditorField.vue';
 import EditorSection from './EditorSection.vue';
+import EditorUploader from './EditorUploader.vue';
+import { useItemCardStore } from '../store/itemCard';
+
+const itemCardStore = useItemCardStore();
 
 // Local values so the form is usable in the layout; not wired to the preview or uploads yet.
 const name = ref('')
 const typeLine = ref('')
+const rarity = ref('')
 const description = ref('')
 const footerText = ref('')
+const artwork = ref('');
 
-const watchName = watch(name, (newValue) => {
-    console.log('name', newValue);
+watch(name, (newValue) => {
+    itemCardStore.setName(newValue);
 });
-const watchTypeLine = watch(typeLine, (newValue) => {
-    console.log('typeLine', newValue);
+watch(typeLine, (newValue) => {
+    itemCardStore.setTypeLine(newValue);
 });
-const watchDescription = watch(description, (newValue) => {
-    console.log('description', newValue);
+watch(description, (newValue) => {
+    itemCardStore.setDescription(newValue);
 });
-const watchFooterText = watch(footerText, (newValue) => {
-    console.log('footerText', newValue);
+watch(footerText, (newValue) => {
+    itemCardStore.setFooterText(newValue);
+});
+watch(artwork, (newValue) => {
+    itemCardStore.setArtwork(newValue);
+});
+watch(rarity, (newValue) => {
+    itemCardStore.setRarity(newValue);
 });
 </script>
 
 <template>
     <div class="editor">
-        <header class="editor__masthead">
-            <h2 class="editor__title">Item card</h2>
-            <p class="editor__subtitle">Layout for everything that appears on the print preview</p>
-        </header>
-
         <form class="editor__form" @submit.prevent>
-            <EditorSection title="Name &amp; type" hint="Header bar and type line (category, rarity, attunement …).">
+            <EditorSection title="Name &amp; type">
                 <EditorField label="Item name" placeholder="E.g. Flame tongue" v-model="name" />
                 <EditorField label="Type line" placeholder="E.g. Weapon (longsword), rare (requires attunement)"
                     v-model="typeLine" />
+                <EditorField label="Rarity" placeholder="E.g. rare" v-model="rarity" />
             </EditorSection>
 
-            <EditorSection title="Artwork"
-                hint="Replaces the placeholder in the art frame. Upload behavior comes later.">
-                <label class="editor__upload">
-                    <input type="file" class="editor__file" accept="image/*" />
-                    <span class="editor__upload-box">
-                        <span class="editor__upload-icon" aria-hidden="true" />
-                        <span class="editor__upload-text">
-                            <span class="editor__upload-lead">Choose image or drop here</span>
-                            <span class="editor__upload-meta">PNG, JPG, WebP — for layout only; no import yet</span>
-                        </span>
-                        <span class="editor__upload-btn" aria-hidden="true">Browse</span>
-                    </span>
-                </label>
+            <EditorSection title="Artwork">
+                <EditorUploader v-model="artwork" />
             </EditorSection>
 
-            <EditorSection title="Description" hint="Body text (HTML on the card later; single block for now).">
+            <EditorSection title="Description">
                 <EditorField type="textarea" label="Text" placeholder="Properties, charge rules, flavor …"
                     v-model="description" />
             </EditorSection>
 
-            <EditorSection title="Footer" hint="Small line under the gold rule (attribution, version, or blank).">
+            <EditorSection title="Footer">
                 <EditorField label="Footer line" placeholder="E.g. D&amp;D 5e — home game" v-model="footerText" />
             </EditorSection>
         </form>
@@ -112,132 +109,11 @@ const watchFooterText = watch(footerText, (newValue) => {
     background: var(--ds-workspace-bg-elevated);
 }
 
-.editor__masthead {
-    border-bottom: 1px solid var(--ds-workspace-border);
-    padding-bottom: var(--ds-space-4);
-    box-shadow: 0 1px 0 0 rgba(200, 160, 58, 0.12);
-}
-
-.editor__title {
-    margin: 0 0 var(--ds-space-1);
-    font-size: var(--ds-text-title);
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    color: var(--ds-workspace-text);
-}
-
-.editor__subtitle {
-    margin: 0;
-    font-size: var(--ds-text-sm);
-    color: var(--ds-workspace-muted);
-    line-height: 1.45;
-    max-width: 36rem;
-}
-
 .editor__form {
     display: flex;
     flex-direction: column;
     gap: var(--ds-space-4);
     max-width: 32rem;
     width: 100%;
-}
-
-/* Upload: label + visually hidden file input (opens picker; no handler yet) */
-.editor__upload {
-    position: relative;
-    display: block;
-    cursor: pointer;
-    border-radius: 3px;
-    margin: 0;
-}
-
-.editor__file {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-    opacity: 0;
-}
-
-.editor__upload-box {
-    display: flex;
-    align-items: center;
-    gap: var(--ds-space-3);
-    min-height: 5.5rem;
-    padding: var(--ds-space-3) var(--ds-space-4);
-    border: 1px dashed rgba(168, 134, 50, 0.45);
-    background: linear-gradient(160deg, rgba(0, 0, 0, 0.2) 0%, rgba(36, 48, 68, 0.6) 100%);
-    border-radius: 3px;
-    transition: border-color 0.15s ease, background 0.15s ease;
-}
-
-.editor__upload:hover .editor__upload-box,
-.editor__upload:focus-within .editor__upload-box {
-    border-color: var(--ds-gold-mid);
-    background: linear-gradient(160deg, rgba(0, 0, 0, 0.15) 0%, rgba(50, 62, 82, 0.75) 100%);
-}
-
-.editor__upload-icon {
-    flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 2px;
-    background: var(--ds-burgundy-mid);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    position: relative;
-}
-
-.editor__upload-icon::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 1rem;
-    height: 0.9rem;
-    border: 2px solid var(--ds-gold-bright);
-    border-radius: 1px;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
-    background: linear-gradient(180deg, rgba(240, 226, 200, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
-}
-
-.editor__upload-text {
-    display: flex;
-    flex-direction: column;
-    gap: var(--ds-space-0);
-    min-width: 0;
-    flex: 1;
-    text-align: left;
-}
-
-.editor__upload-lead {
-    font-size: var(--ds-text-sm);
-    font-weight: 600;
-    color: var(--ds-workspace-text);
-}
-
-.editor__upload-meta {
-    font-size: var(--ds-text-xs);
-    color: var(--ds-workspace-muted);
-    line-height: 1.35;
-}
-
-.editor__upload-btn {
-    flex-shrink: 0;
-    font-size: var(--ds-text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #f0e6d2;
-    padding: var(--ds-space-2) var(--ds-space-3);
-    background: var(--ds-burgundy);
-    border: 1px solid var(--ds-gold);
-    border-radius: 2px;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-    pointer-events: none;
 }
 </style>

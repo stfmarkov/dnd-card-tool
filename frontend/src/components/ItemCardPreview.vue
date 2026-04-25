@@ -1,17 +1,19 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 /** Shipped placeholder when no art is set (user uploads are not in the build). */
 import placeholderUrl from '../assets/images/placeholder.svg?url'
+import { useItemCardStore } from '../store/itemCard';
 
-const item = ref({
-  name: 'Item Name',
-  typeLine: 'Wondrous item, uncommon',
-  description: '<p>This is a <b>cool</b> description of the item. Flavor text can run a few lines and stay readable on print.</p>',
-  imageUrl: null as string | null,
-})
+const itemCardStore = useItemCardStore();
 
-const artSrc = computed(() => item.value.imageUrl || placeholderUrl)
+const name = computed(() => itemCardStore.name || 'Item Name')
+const typeLine = computed(() => itemCardStore.typeLine || 'Wondrous item')
+const description = computed(() => itemCardStore.description || '<p>This is a <b>cool</b> description of the item. Flavor text can run a few lines and stay readable on print.</p>')
+const footerText = computed(() => itemCardStore.footerText || 'D&amp;D 5e — item card (preview)')
+const rarity = computed(() => itemCardStore.rarity || 'common')
+
+const artSrc = computed(() => itemCardStore.artwork || placeholderUrl)
 </script>
 
 <template>
@@ -19,9 +21,9 @@ const artSrc = computed(() => item.value.imageUrl || placeholderUrl)
     <div class="item-card__card" role="article" aria-label="Item card preview">
       <header class="item-card__header">
         <div class="item-card__header-bar">
-          <h2 class="item-card__title">{{ item.name }}</h2>
+          <h2 class="item-card__title">{{ name }}</h2>
         </div>
-        <p class="item-card__type-line">{{ item.typeLine }}</p>
+        <p class="item-card__type-line">{{ typeLine }}, {{ rarity }}</p>
       </header>
 
       <div class="item-card__body">
@@ -37,12 +39,12 @@ const artSrc = computed(() => item.value.imageUrl || placeholderUrl)
           </div>
         </figure>
 
-        <div class="item-card__description" v-html="item.description" />
+        <div class="item-card__description" v-html="description" />
       </div>
 
       <footer class="item-card__footer">
         <div class="item-card__footer-rule" aria-hidden="true" />
-        <p class="item-card__footer-text">D&amp;D 5e — item card (preview)</p>
+        <p class="item-card__footer-text">{{ footerText }}</p>
       </footer>
     </div>
   </div>
