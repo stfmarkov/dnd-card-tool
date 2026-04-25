@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import EditorField from './EditorField.vue';
+import EditorSection from './EditorSection.vue';
 
 // Local values so the form is usable in the layout; not wired to the preview or uploads yet.
 const name = ref('')
@@ -30,18 +31,14 @@ const watchFooterText = watch(footerText, (newValue) => {
         </header>
 
         <form class="editor__form" @submit.prevent>
-            <section class="editor__section" aria-labelledby="label-identity">
-                <h2 id="label-identity" class="editor__section-title">Name &amp; type</h2>
-                <p class="editor__section-hint">Header bar and type line (category, rarity, attunement …).</p>
+            <EditorSection title="Name &amp; type" hint="Header bar and type line (category, rarity, attunement …).">
                 <EditorField label="Item name" placeholder="E.g. Flame tongue" v-model="name" />
                 <EditorField label="Type line" placeholder="E.g. Weapon (longsword), rare (requires attunement)"
                     v-model="typeLine" />
-            </section>
+            </EditorSection>
 
-            <section class="editor__section" aria-labelledby="label-art">
-                <h2 id="label-art" class="editor__section-title">Artwork</h2>
-                <p class="editor__section-hint">Replaces the placeholder in the art frame. Upload behavior comes later.
-                </p>
+            <EditorSection title="Artwork"
+                hint="Replaces the placeholder in the art frame. Upload behavior comes later.">
                 <label class="editor__upload">
                     <input type="file" class="editor__file" accept="image/*" />
                     <span class="editor__upload-box">
@@ -53,20 +50,16 @@ const watchFooterText = watch(footerText, (newValue) => {
                         <span class="editor__upload-btn" aria-hidden="true">Browse</span>
                     </span>
                 </label>
-            </section>
+            </EditorSection>
 
-            <section class="editor__section" aria-labelledby="label-body">
-                <h2 id="label-body" class="editor__section-title">Description</h2>
-                <p class="editor__section-hint">Body text (HTML on the card later; single block for now).</p>
+            <EditorSection title="Description" hint="Body text (HTML on the card later; single block for now).">
                 <EditorField type="textarea" label="Text" placeholder="Properties, charge rules, flavor …"
                     v-model="description" />
-            </section>
+            </EditorSection>
 
-            <section class="editor__section" aria-labelledby="label-footer">
-                <h2 id="label-footer" class="editor__section-title">Footer</h2>
-                <p class="editor__section-hint">Small line under the gold rule (attribution, version, or blank).</p>
+            <EditorSection title="Footer" hint="Small line under the gold rule (attribution, version, or blank).">
                 <EditorField label="Footer line" placeholder="E.g. D&amp;D 5e — home game" v-model="footerText" />
-            </section>
+            </EditorSection>
         </form>
     </div>
 </template>
@@ -147,37 +140,6 @@ const watchFooterText = watch(footerText, (newValue) => {
     gap: var(--ds-space-4);
     max-width: 32rem;
     width: 100%;
-}
-
-.editor__section {
-    margin: 0;
-    padding: var(--ds-space-4);
-    background: var(--ds-workspace-bg-elevated);
-    border: 1px solid var(--ds-workspace-border);
-    border-radius: 4px;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-    display: flex;
-    flex-direction: column;
-    gap: var(--ds-space-3);
-}
-
-.editor__section-title {
-    margin: 0;
-    font-size: var(--ds-text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.11em;
-    color: #e8d9b8;
-    font-weight: 600;
-    border-left: 3px solid var(--ds-gold-mid);
-    padding-left: var(--ds-space-3);
-}
-
-.editor__section-hint {
-    margin: calc(-1 * var(--ds-space-1)) 0 0;
-    padding-left: calc(var(--ds-space-3) + 3px);
-    font-size: var(--ds-text-xs);
-    color: var(--ds-workspace-muted);
-    line-height: 1.4;
 }
 
 /* Upload: label + visually hidden file input (opens picker; no handler yet) */
