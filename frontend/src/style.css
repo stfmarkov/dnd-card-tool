@@ -1,0 +1,107 @@
+/* Design system: D&D 5e–style "desk" look for printable cards (parchment, burgundy, gold) + app workspace. */
+
+:root {
+    /* —— Printable assets (PHB-style book / item cards) —— */
+    --ds-parchment: #f0e2c8;
+    --ds-parchment-dark: #e3d0ae;
+    --ds-parchment-shadow: #d4c49a;
+    /* Ink: body text and rules on light parchment */
+    --ds-ink: #1a120d;
+    --ds-ink-muted: #3d2f24;
+    --ds-ink-faint: #5c4a3c;
+    /* Chapter-header burgundy / card title bars */
+    --ds-burgundy: #4a0f0f;
+    --ds-burgundy-mid: #5c1814;
+    --ds-burgundy-light: #6b2420;
+    /* Accents: foil / decorative rules (muted gold, not bright yellow) */
+    --ds-gold: #8a6a28;
+    --ds-gold-mid: #a88632;
+    --ds-gold-bright: #c4a03a;
+    /* Rules and hairlines (stat blocks, dividers) */
+    --ds-rule: #6b5344;
+    --ds-rule-light: #9a7f63;
+    --ds-hairline: #c4b08a;
+    /* Optional: 5e-style header tint (uncommon+ item names) */
+    --ds-tint-uncommon: #1e4d2a;
+    --ds-tint-rare: #1a3a6e;
+    --ds-tint-very-rare: #4a1a5e;
+    --ds-tint-legendary: #5c4010;
+    --ds-tint-artifact: #4a0a0a;
+    /* —— App workspace (on-screen tool; keeps parchment preview readable) —— */
+    --ds-workspace-bg: #1b2636;
+    --ds-workspace-bg-elevated: #243044;
+    --ds-workspace-text: #f2f2f0;
+    --ds-workspace-muted: #9aa8b8;
+    --ds-workspace-border: #3d4a5c;
+    /* —— Typography —— */
+    --ds-font-ui: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    /* For card body / readable print: system serifs; swap to Cinzel/Bookmania in @font-face later if you want */
+    --ds-font-card: "Cambria", "Georgia", "Times New Roman", Times, serif;
+    --ds-font-stat: "Segoe UI", system-ui, sans-serif;
+    /* —— Spacing: 4px grid; works for UI and @media print —— */
+    --ds-space-0: 0.125rem;
+    /* 2 */
+    --ds-space-1: 0.25rem;
+    /* 4 */
+    --ds-space-2: 0.5rem;
+    /* 8 */
+    --ds-space-3: 0.75rem;
+    /* 12 */
+    --ds-space-4: 1rem;
+    /* 16 */
+    --ds-space-5: 1.5rem;
+    /* 24 */
+    --ds-space-6: 2rem;
+    /* 32 */
+    --ds-space-7: 2.5rem;
+    /* 40 */
+    --ds-space-8: 3rem;
+    /* 48 */
+    /* Card inner safe area (poker: ~2.5×3.5in; keep text off trim) */
+    --ds-card-padding-mm: 3mm;
+    --ds-card-padding: var(--ds-space-3);
+    --ds-card-radius: 2px;
+    /* Borders */
+    --ds-border-thin: 1px solid var(--ds-hairline);
+    --ds-border-rule: 2px solid var(--ds-burgundy);
+    --ds-border-gold: 1px solid var(--ds-gold-mid);
+    /* Type scale (rem) */
+    --ds-text-xs: 0.6875rem;
+    /* 11pt feel */
+    --ds-text-sm: 0.8125rem;
+    /* 13 */
+    --ds-text-base: 0.9375rem;
+    /* 15 */
+    --ds-text-md: 1.05rem;
+    --ds-text-lg: 1.2rem;
+    --ds-text-title: 1.35rem;
+    /* Shadows: subtle on screen only; omit or flatten for print in components */
+    --ds-shadow-card: 0 2px 8px rgba(10, 8, 6, 0.15);
+    --ds-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+html {
+    background-color: var(--ds-workspace-bg);
+    text-align: center;
+    color: var(--ds-workspace-text);
+}
+
+body {
+    margin: 0;
+    color: var(--ds-workspace-text);
+    font-family: var(--ds-font-ui);
+}
+
+@font-face {
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 400;
+    src: local(""),
+        url("assets/fonts/nunito-v16-latin-regular.woff2") format("woff2");
+}
+
+#app {
+    height: 100vh;
+    text-align: center;
+}
