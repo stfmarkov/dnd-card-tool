@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -24,9 +23,23 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+type CardData struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	TypeLine    string `json:"typeLine"`
+	Description string `json:"description"`
+	FooterText  string `json:"footerText"`
+	Rarity      string `json:"rarity"`
+	Artwork     string `json:"artwork"`
+}
+
+type SaveCardDataRequest struct {
+	Name        string `json:"name"`
+	TypeLine    string `json:"typeLine"`
+	Description string `json:"description"`
+	FooterText  string `json:"footerText"`
+	Rarity      string `json:"rarity"`
+	Artwork     string `json:"artwork"`
 }
 
 // SaveCardPNG opens the OS save dialog and writes PNG bytes to the chosen path.
@@ -46,4 +59,20 @@ func (a *App) SaveCardPNG(defaultFilename string, data []byte) error {
 		return nil
 	}
 	return os.WriteFile(path, data, 0o644)
+}
+
+func (a *App) SaveCardData(cardData SaveCardDataRequest) error {
+	return addCard(cardData)
+}
+
+func (a *App) GetCardData() ([]CardData, error) {
+	return readCardsFromJson()
+}
+
+func (a *App) DeleteCardData(id string) error {
+	return deleteCardById(id)
+}
+
+func (a *App) UpdateCardData(id string, cardData CardData) error {
+	return updateCardById(id, cardData)
 }

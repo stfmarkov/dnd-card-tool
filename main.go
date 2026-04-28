@@ -23,12 +23,25 @@ func buildAppMenu(a *App) *menu.Menu {
 		m.Append(menu.AppMenu())
 	}
 	file := m.AddSubmenu("File")
+
 	file.AddText("New card", keys.CmdOrCtrl("n"), func(_ *menu.CallbackData) {
 		runtime.EventsEmit(a.ctx, "menu:action", "new-card")
 	})
 
+	file.AddText("Open card…", keys.CmdOrCtrl("o"), func(_ *menu.CallbackData) {
+		runtime.EventsEmit(a.ctx, "menu:action", "open-card")
+	})
+
+	file.AddText("Save card…", keys.CmdOrCtrl("s"), func(_ *menu.CallbackData) {
+		runtime.EventsEmit(a.ctx, "menu:action", "save-card")
+	})
+
 	file.AddText("Export card…", keys.CmdOrCtrl("p"), func(_ *menu.CallbackData) {
 		runtime.EventsEmit(a.ctx, "menu:action", "print-card")
+	})
+
+	file.AddText("Exit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
+		runtime.Quit(a.ctx)
 	})
 
 	m.Append(menu.EditMenu())
