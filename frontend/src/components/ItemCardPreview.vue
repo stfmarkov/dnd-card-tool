@@ -1,9 +1,11 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, onUnmounted } from 'vue'
 
 /** Shipped placeholder when no art is set (user uploads are not in the build). */
 import placeholderUrl from '../assets/images/placeholder.svg?url'
 import { useItemCardStore } from '../store/itemCard';
+import { EventsOn, EventsOff } from '../../wailsjs/runtime/runtime';
+import { printCard } from '../utils/printCard';
 
 const itemCardStore = useItemCardStore();
 
@@ -14,6 +16,16 @@ const footerText = computed(() => itemCardStore.footerText || 'D&amp;D 5e — it
 const rarity = computed(() => itemCardStore.rarity || 'common')
 
 const artSrc = computed(() => itemCardStore.artwork || placeholderUrl)
+
+EventsOn('menu:action', async (event) => {
+  if (event !== 'print-card') return
+  await printCard('.item-card__card', `${name.value}-${typeLine.value}-${rarity.value}`)
+})
+
+onUnmounted(() => {
+  EventsOff('menu:action');
+});
+
 </script>
 
 <template>
@@ -29,13 +41,7 @@ const artSrc = computed(() => itemCardStore.artwork || placeholderUrl)
       <div class="item-card__body">
         <figure class="item-card__art">
           <div class="item-card__art-frame">
-            <img
-              :src="artSrc"
-              alt=""
-              class="item-card__art-img"
-              width="280"
-              height="280"
-            />
+            <img :src="artSrc" alt="" class="item-card__art-img" width="280" height="280" />
           </div>
         </figure>
 
@@ -70,11 +76,9 @@ const artSrc = computed(() => itemCardStore.artwork || placeholderUrl)
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  background: linear-gradient(
-    180deg,
-    var(--ds-parchment) 0%,
-    var(--ds-parchment-dark) 100%
-  );
+  background: linear-gradient(180deg,
+      var(--ds-parchment) 0%,
+      var(--ds-parchment-dark) 100%);
   border-radius: var(--ds-card-radius);
   box-shadow: var(--ds-shadow-card), 0 0 0 1px var(--ds-hairline),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);

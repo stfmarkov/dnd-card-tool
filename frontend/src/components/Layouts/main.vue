@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, shallowRef } from 'vue';
 import type { Component } from 'vue';
 import ItemCardEditor from '../ItemCardEditor.vue';
 import ItemCardPreview from '../ItemCardPreview.vue';
 
-const selectedLeftComponent = ref<Component | null>(null)
-const selectedRightComponent = ref<Component | null>(null)
+const selectedLeftComponent = shallowRef<Component | null>(null)
+const selectedRightComponent = shallowRef<Component | null>(null)
 
 onMounted(() => {
     selectedLeftComponent.value = ItemCardPreview

@@ -4,6 +4,7 @@ import EditorField from './EditorField.vue';
 import EditorSection from './EditorSection.vue';
 import EditorUploader from './EditorUploader.vue';
 import { useItemCardStore } from '../store/itemCard';
+import { EventsOn } from '../../wailsjs/runtime/runtime';
 
 const itemCardStore = useItemCardStore();
 
@@ -14,6 +15,18 @@ const rarity = ref('')
 const description = ref('')
 const footerText = ref('')
 const artwork = ref('');
+
+EventsOn('menu:action', (event) => {
+    if (event === 'new-card') {
+        itemCardStore.newCard();
+        name.value = '';
+        typeLine.value = '';
+        rarity.value = '';
+        description.value = '';
+        footerText.value = '';
+        artwork.value = '';
+    }
+});
 
 watch(name, (newValue) => {
     itemCardStore.setName(newValue);
