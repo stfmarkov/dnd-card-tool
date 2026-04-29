@@ -1,4 +1,10 @@
 import { defineStore } from 'pinia'
+import { SaveCardData } from '../../wailsjs/go/main/App'
+
+function extFromFilename(name: string): string {
+  const dot = name.lastIndexOf('.')
+  return dot >= 0 ? name.slice(dot).toLowerCase() : '.png'
+}
 
 export const useItemCardStore = defineStore('itemCard', {
   state: () => ({
@@ -7,6 +13,8 @@ export const useItemCardStore = defineStore('itemCard', {
     description: '',
     footerText: '',
     artwork: '',
+    /** Last picked image file for save (hash + dedup on disk); cleared when artwork is cleared. */
+    artworkSourceFile: null as File | null,
     rarity: '',
   }),
   actions: {
@@ -28,6 +36,12 @@ export const useItemCardStore = defineStore('itemCard', {
         URL.revokeObjectURL(this.artwork)
       }
       this.artwork = artwork
+      if (!artwork) {
+        this.artworkSourceFile = null
+      }
+    },
+    setArtworkSourceFile(file: File | null) {
+      this.artworkSourceFile = file
     },
     setRarity(rarity: string) {
       this.rarity = rarity
@@ -41,6 +55,34 @@ export const useItemCardStore = defineStore('itemCard', {
       this.description = '<p>This is a <b>cool</b> description of the item. Flavor text can run a few lines and stay readable on print.</p>'
       this.footerText = 'D&amp;D 5e — item card (preview)'
       this.setArtwork('')
+    },
+    /**
+     * Saves the current card to cards.json. Optional artwork is written under item-cards/art/{md5}{ext}
+     * only when that file is missing; JSON stores the basename in `artwork`.
+     * Cards without an image use an empty `artwork` field. Appending only — editing an existing row uses UpdateCardData (future).
+     */
+    async saveCard() {
+      let imageBytes: number[] = []
+      let imageExt = '.png'
+      if (this.artworkSourceFile) {
+        const buf = await this.artworkSourceFile.arrayBuffer()
+        imageBytes = Array.from(new Uint8Array(buf))
+        imageExt = extFromFilename(this.artworkSourceFile.name)
+      } else if (this.artwork.startsWith('blob:')) {
+        const buf = await fetch(this.artwork).then((r) => r.arrayBuffer())
+        imageBytes = Array.from(new Uint8Array(buf))
+        imageExt = '.png'
+      }
+      await SaveCardData({
+        name: this.name,
+        typeLine: this.typeLine,
+        description: this.description,
+        footerText: this.footerText,
+        rarity: this.rarity,
+        artwork: '',
+        imageBytes,
+        imageExt,
+      })
     },
   }
 })

@@ -26,6 +26,9 @@ EventsOn('menu:action', (event) => {
         footerText.value = '';
         artwork.value = '';
     }
+    if (event === 'save-card') {
+        void itemCardStore.saveCard();
+    }
 });
 
 watch(name, (newValue) => {
@@ -59,7 +62,7 @@ watch(rarity, (newValue) => {
             </EditorSection>
 
             <EditorSection title="Artwork">
-                <EditorUploader v-model="artwork" />
+                <EditorUploader v-model="artwork" @update:source-file="itemCardStore.setArtworkSourceFile" />
             </EditorSection>
 
             <EditorSection title="Description">

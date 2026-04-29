@@ -31,6 +31,8 @@ export namespace main {
 	    footerText: string;
 	    rarity: string;
 	    artwork: string;
+	    imageBytes: number[];
+	    imageExt: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new SaveCardDataRequest(source);
@@ -44,6 +46,8 @@ export namespace main {
 	        this.footerText = source["footerText"];
 	        this.rarity = source["rarity"];
 	        this.artwork = source["artwork"];
+	        this.imageBytes = source["imageBytes"];
+	        this.imageExt = source["imageExt"];
 	    }
 	}
 

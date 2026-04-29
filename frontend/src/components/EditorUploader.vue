@@ -3,6 +3,7 @@ import { ref, watch } from 'vue';
 
 const emit = defineEmits<{
     (e: 'update:modelValue', value: string | null): void;
+    (e: 'update:sourceFile', value: File | null): void;
 }>();
 
 const file = ref<File | null>(null);
@@ -14,9 +15,12 @@ watch(fileUrl, (newUrl) => {
 
 const handleFileChange = (event: Event) => {
     const input = event.target as HTMLInputElement;
-    if (input.files) {
+    if (input.files?.[0]) {
         file.value = input.files[0];
         fileUrl.value = URL.createObjectURL(file.value as Blob);
+        emit('update:sourceFile', file.value);
+    } else {
+        emit('update:sourceFile', null);
     }
 };
 </script>
@@ -27,7 +31,7 @@ const handleFileChange = (event: Event) => {
         <span class="editor__upload-box">
             <span class="editor__upload-text">
                 <span class="editor__upload-lead">Choose image or drop here</span>
-                <span class="editor__upload-meta">PNG, JPG, WebP — for layout only; no import yet</span>
+                <span class="editor__upload-meta">PNG, JPG, WebP — saved by hash when you use File / Save card</span>
             </span>
             <span class="editor__upload-btn" aria-hidden="true">Browse</span>
         </span>

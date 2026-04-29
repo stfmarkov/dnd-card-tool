@@ -1,17 +1,24 @@
 package main
 
 import (
+	"crypto/md5"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/google/uuid"
 )
 
 const cardsDir = "item-cards"
+const cardsArtDirName = "art"
 const cardsJsonFileName = "cards.json"
+
+// maxArtBytes caps uploaded artwork size when saving from the editor (dedup still uses full hash).
+const maxArtBytes = 25 << 20 // 25 MiB
 
 func createCardsJsonFile() error {
 	userConfigDir, err := os.UserConfigDir()
@@ -43,10 +50,20 @@ func saveCardsToJson(cards []CardData) error {
 	return os.WriteFile(filepath.Join(userConfigDir, cardsDir, cardsJsonFileName), jsonData, 0o644)
 }
 
+// addCard appends to cards.json. For replacing an existing row, use updateCardById via UpdateCardData from the UI when edit-by-id exists.
 func addCard(card SaveCardDataRequest) error {
 	cards, err := readCardsFromJson()
 	if err != nil {
 		return err
+	}
+
+	artwork := card.Artwork
+	if len(card.ImageBytes) > 0 {
+		name, err := saveArtIfMissing(card.ImageBytes, card.ImageExt)
+		if err != nil {
+			return err
+		}
+		artwork = name
 	}
 
 	newCard := CardData{
@@ -56,7 +73,7 @@ func addCard(card SaveCardDataRequest) error {
 		Description: card.Description,
 		FooterText:  card.FooterText,
 		Rarity:      card.Rarity,
-		Artwork:     card.Artwork,
+		Artwork:     artwork,
 	}
 	cards = append(cards, newCard)
 	return saveCardsToJson(cards)
@@ -108,6 +125,53 @@ func updateCardById(id string, card CardData) error {
 		}
 	}
 	return errors.New("card not found")
+}
+
+// normalizeArtExt returns a lowercase extension including leading dot, restricted to common image types.
+func normalizeArtExt(ext string) string {
+	ext = strings.TrimSpace(strings.ToLower(ext))
+	if ext == "" {
+		return ".png"
+	}
+	if !strings.HasPrefix(ext, ".") {
+		ext = "." + ext
+	}
+	switch ext {
+	case ".jpg", ".jpeg", ".png", ".webp", ".gif":
+		return ext
+	default:
+		return ".png"
+	}
+}
+
+// saveArtIfMissing writes image bytes to userConfig/item-cards/art/{md5}{ext} when the file does not exist.
+// Returns the basename (e.g. "d41d8cd98f00b204e9800998ecf8427e.png") or empty string when data is empty.
+func saveArtIfMissing(data []byte, ext string) (string, error) {
+	if len(data) == 0 {
+		return "", nil
+	}
+	if len(data) > maxArtBytes {
+		return "", errors.New("image exceeds maximum size")
+	}
+	ext = normalizeArtExt(ext)
+	sum := md5.Sum(data)
+	basename := fmt.Sprintf("%x%s", sum, ext)
+
+	userConfigDir, err := os.UserConfigDir()
+	if err != nil {
+		return "", err
+	}
+	artDir := filepath.Join(userConfigDir, cardsDir, cardsArtDirName)
+	if err := os.MkdirAll(artDir, 0o755); err != nil {
+		return "", err
+	}
+	fullPath := filepath.Join(artDir, basename)
+	if _, err := os.Stat(fullPath); err == nil {
+		return basename, nil
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return "", err
+	}
+	return basename, os.WriteFile(fullPath, data, 0o644)
 }
 
 func deleteCardById(id string) error {
