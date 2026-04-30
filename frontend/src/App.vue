@@ -7,8 +7,10 @@ import type { Component } from 'vue';
 import GridLayout from './components/Layouts/grid.vue'
 import { useGeneralStore } from './store/general'
 import type { Layout } from './store/general'
+import { useItemCardsStore } from './store/itemCards'
 
 const generalStore = useGeneralStore()
+const itemCardsStore = useItemCardsStore()
 
 const layouts = {
   main: MainLayout,
@@ -23,12 +25,31 @@ const selectedLayout = computed(() => {
 
 watch(selectedLayout, (newLayout) => {
   selectedLayoutComponent.value = layouts[newLayout]
+  if (newLayout === 'grid') {
+    getItems()
+  }
 })
+
+const getItems = async () => {
+  const cards = await GetCardData()
+
+  itemCardsStore.setItems(cards.map(card => ({
+    id: card.id,
+    name: card.name,
+    typeLine: card.typeLine,
+    description: card.description,
+    footerText: card.footerText,
+    artwork: card.artwork,
+    artworkSourceFile: null,
+    rarity: card.rarity,
+  })))
+
+}
 
 onMounted(async () => {
   selectedLayoutComponent.value = MainLayout
-  const cards = await GetCardData()
-  console.log(cards)
+
+  await getItems()
 })
 
 </script>

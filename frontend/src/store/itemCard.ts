@@ -1,13 +1,26 @@
 import { defineStore } from 'pinia'
 import { SaveCardData } from '../../wailsjs/go/main/App'
 
-function extFromFilename(name: string): string {
+const extFromFilename = (name: string): string => {
   const dot = name.lastIndexOf('.')
   return dot >= 0 ? name.slice(dot).toLowerCase() : '.png'
 }
 
+export interface ItemCard {
+  /** Set when row comes from GetCardData (for list keys) */
+  id: string;
+  name: string;
+  typeLine: string;
+  description: string;
+  footerText: string;
+  artwork: string;
+  artworkSourceFile: File | null;
+  rarity: string;
+}
+
 export const useItemCardStore = defineStore('itemCard', {
-  state: () => ({
+  state: (): ItemCard => ({
+    id: '',
     name: '',
     typeLine: '',
     description: '',

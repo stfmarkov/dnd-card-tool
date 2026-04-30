@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"os"
+	"path/filepath"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -69,7 +71,24 @@ func (a *App) SaveCardData(cardData SaveCardDataRequest) error {
 }
 
 func (a *App) GetCardData() ([]CardData, error) {
-	return readCardsFromJson()
+	cards, err := readCardsFromJson()
+	if err != nil {
+		return nil, err
+	}
+
+	for i, card := range cards {
+		userConfigDir, err := os.UserConfigDir()
+		if err != nil {
+			return nil, err
+		}
+		artwork, err := os.ReadFile(filepath.Join(userConfigDir, "item-cards", "art", card.Artwork))
+		if err != nil {
+			return nil, err
+		}
+		cards[i].Artwork = base64.StdEncoding.EncodeToString(artwork)
+	}
+
+	return cards, nil
 }
 
 func (a *App) DeleteCardData(id string) error {
