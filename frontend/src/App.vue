@@ -3,6 +3,7 @@ import MainLayout from './components/Layouts/main.vue'
 import { onMounted, shallowRef, computed, watch } from 'vue'
 import { GetCardData } from '../wailsjs/go/main/App'
 import NavigationMenu from './components/NavigationMenu.vue'
+import Toast from './components/utils/Toast.vue'
 import type { Component } from 'vue';
 import GridLayout from './components/Layouts/grid.vue'
 import { useGeneralStore } from './store/general'
@@ -56,6 +57,7 @@ onMounted(async () => {
 <template>
   <component :is="selectedLayoutComponent" />
   <NavigationMenu />
+  <Toast />
 </template>
 
 <style>

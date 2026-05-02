@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { SaveCardData } from '../../wailsjs/go/main/App'
+import { useGeneralStore } from './general'
 
 const extFromFilename = (name: string): string => {
   const dot = name.lastIndexOf('.')
@@ -75,27 +76,33 @@ export const useItemCardStore = defineStore('itemCard', {
      * Cards without an image use an empty `artwork` field. Appending only — editing an existing row uses UpdateCardData (future).
      */
     async saveCard() {
-      let imageBytes: number[] = []
-      let imageExt = '.png'
-      if (this.artworkSourceFile) {
-        const buf = await this.artworkSourceFile.arrayBuffer()
-        imageBytes = Array.from(new Uint8Array(buf))
-        imageExt = extFromFilename(this.artworkSourceFile.name)
-      } else if (this.artwork.startsWith('blob:')) {
-        const buf = await fetch(this.artwork).then((r) => r.arrayBuffer())
-        imageBytes = Array.from(new Uint8Array(buf))
-        imageExt = '.png'
+      const generalStore = useGeneralStore()
+      try {
+        let imageBytes: number[] = []
+        let imageExt = '.png'
+        if (this.artworkSourceFile) {
+          const buf = await this.artworkSourceFile.arrayBuffer()
+          imageBytes = Array.from(new Uint8Array(buf))
+          imageExt = extFromFilename(this.artworkSourceFile.name)
+        } else if (this.artwork.startsWith('blob:')) {
+          const buf = await fetch(this.artwork).then((r) => r.arrayBuffer())
+          imageBytes = Array.from(new Uint8Array(buf))
+          imageExt = '.png'
+        }
+        await SaveCardData({
+          name: this.name,
+          typeLine: this.typeLine,
+          description: this.description,
+          footerText: this.footerText,
+          rarity: this.rarity,
+          artwork: '',
+          imageBytes,
+          imageExt,
+        })
+        generalStore.setToast({ title: 'Card saved', message: this.name || '', type: 'success' })
+      } catch (e) {
+        generalStore.setToast({ title: 'Save failed', message: String(e), type: 'error' })
       }
-      await SaveCardData({
-        name: this.name,
-        typeLine: this.typeLine,
-        description: this.description,
-        footerText: this.footerText,
-        rarity: this.rarity,
-        artwork: '',
-        imageBytes,
-        imageExt,
-      })
     },
   }
 })

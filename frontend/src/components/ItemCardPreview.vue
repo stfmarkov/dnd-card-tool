@@ -4,10 +4,12 @@ import { computed, onUnmounted } from 'vue'
 /** Shipped placeholder when no art is set (user uploads are not in the build). */
 import placeholderUrl from '../assets/images/placeholder.svg?url'
 import { useItemCardStore } from '../store/itemCard';
+import { useGeneralStore } from '../store/general';
 import { EventsOn, EventsOff } from '../../wailsjs/runtime/runtime';
 import { printCard } from '../utils/printCard';
 
 const itemCardStore = useItemCardStore();
+const generalStore = useGeneralStore();
 
 const name = computed(() => itemCardStore.name || 'Item Name')
 const typeLine = computed(() => itemCardStore.typeLine || 'Wondrous item')
@@ -19,7 +21,12 @@ const artSrc = computed(() => itemCardStore.artwork || placeholderUrl)
 
 EventsOn('menu:action', async (event) => {
   if (event !== 'print-card') return
-  await printCard('.item-card__card', `${name.value}-${typeLine.value}-${rarity.value}`)
+  try {
+    const filename = await printCard('.item-card__card', `${name.value}-${typeLine.value}-${rarity.value}`)
+    generalStore.setToast({ title: 'Card exported', message: filename ?? 'asdf', type: 'success' })
+  } catch (e) {
+    generalStore.setToast({ title: 'Export failed', message: String(e), type: 'error' })
+  }
 })
 
 onUnmounted(() => {
