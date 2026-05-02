@@ -66,7 +66,20 @@ func (a *App) SaveCardPNG(defaultFilename string, data []byte) error {
 	return os.WriteFile(path, data, 0o644)
 }
 
-func (a *App) SaveCardData(cardData SaveCardDataRequest) error {
+// UpdateCardDataRequest is the payload for UpdateCardData. Behaves like SaveCardDataRequest but targets an existing card by ID.
+type UpdateCardDataRequest struct {
+	Name        string `json:"name"`
+	TypeLine    string `json:"typeLine"`
+	Description string `json:"description"`
+	FooterText  string `json:"footerText"`
+	Rarity      string `json:"rarity"`
+	Artwork     string `json:"artwork"`
+	ImageBytes  []byte `json:"imageBytes"`
+	ImageExt    string `json:"imageExt"`
+}
+
+// SaveCardData appends a new card and returns the assigned ID.
+func (a *App) SaveCardData(cardData SaveCardDataRequest) (string, error) {
 	return addCard(cardData)
 }
 
@@ -95,6 +108,6 @@ func (a *App) DeleteCardData(id string) error {
 	return deleteCardById(id)
 }
 
-func (a *App) UpdateCardData(id string, cardData CardData) error {
+func (a *App) UpdateCardData(id string, cardData UpdateCardDataRequest) error {
 	return updateCardById(id, cardData)
 }

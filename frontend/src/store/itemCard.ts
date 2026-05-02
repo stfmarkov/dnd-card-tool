@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { SaveCardData } from '../../wailsjs/go/main/App'
+import { SaveCardData, UpdateCardData } from '../../wailsjs/go/main/App'
 import { useGeneralStore } from './general'
 
 const extFromFilename = (name: string): string => {
@@ -63,6 +63,7 @@ export const useItemCardStore = defineStore('itemCard', {
     /** Clear all card fields; used from the OS / File / New card menu. */
     newCard() {
       console.log('newCard')
+      this.id = ''
       this.name = 'Item Name'
       this.typeLine = 'Wondrous item'
       this.rarity = 'common'
@@ -71,9 +72,8 @@ export const useItemCardStore = defineStore('itemCard', {
       this.setArtwork('')
     },
     /**
-     * Saves the current card to cards.json. Optional artwork is written under item-cards/art/{md5}{ext}
-     * only when that file is missing; JSON stores the basename in `artwork`.
-     * Cards without an image use an empty `artwork` field. Appending only — editing an existing row uses UpdateCardData (future).
+     * Saves the current card. On the first save, appends a new row and stores the returned ID.
+     * Subsequent saves update the same row via UpdateCardData so no duplicates are created.
      */
     async saveCard() {
       const generalStore = useGeneralStore()
@@ -89,7 +89,8 @@ export const useItemCardStore = defineStore('itemCard', {
           imageBytes = Array.from(new Uint8Array(buf))
           imageExt = '.png'
         }
-        await SaveCardData({
+
+        const payload = {
           name: this.name,
           typeLine: this.typeLine,
           description: this.description,
@@ -98,7 +99,15 @@ export const useItemCardStore = defineStore('itemCard', {
           artwork: '',
           imageBytes,
           imageExt,
-        })
+        }
+
+        if (this.id) {
+          await UpdateCardData(this.id, payload)
+        } else {
+          const newId = await SaveCardData(payload)
+          this.id = newId
+        }
+
         generalStore.setToast({ title: 'Card saved', message: this.name || '', type: 'success' })
       } catch (e) {
         generalStore.setToast({ title: 'Save failed', message: String(e), type: 'error' })

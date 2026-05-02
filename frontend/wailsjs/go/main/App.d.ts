@@ -6,8 +6,8 @@ export function DeleteCardData(arg1:string):Promise<void>;
 
 export function GetCardData():Promise<Array<main.CardData>>;
 
-export function SaveCardData(arg1:main.SaveCardDataRequest):Promise<void>;
+export function SaveCardData(arg1:main.SaveCardDataRequest):Promise<string>;
 
 export function SaveCardPNG(arg1:string,arg2:Array<number>):Promise<void>;
 
-export function UpdateCardData(arg1:string,arg2:main.CardData):Promise<void>;
+export function UpdateCardData(arg1:string,arg2:main.UpdateCardDataRequest):Promise<void>;

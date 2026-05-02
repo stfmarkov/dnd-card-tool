@@ -50,18 +50,18 @@ func saveCardsToJson(cards []CardData) error {
 	return os.WriteFile(filepath.Join(userConfigDir, cardsDir, cardsJsonFileName), jsonData, 0o644)
 }
 
-// addCard appends to cards.json. For replacing an existing row, use updateCardById via UpdateCardData from the UI when edit-by-id exists.
-func addCard(card SaveCardDataRequest) error {
+// addCard appends a new card to cards.json and returns the new card's ID.
+func addCard(card SaveCardDataRequest) (string, error) {
 	cards, err := readCardsFromJson()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	artwork := card.Artwork
 	if len(card.ImageBytes) > 0 {
 		name, err := saveArtIfMissing(card.ImageBytes, card.ImageExt)
 		if err != nil {
-			return err
+			return "", err
 		}
 		artwork = name
 	}
@@ -76,7 +76,7 @@ func addCard(card SaveCardDataRequest) error {
 		Artwork:     artwork,
 	}
 	cards = append(cards, newCard)
-	return saveCardsToJson(cards)
+	return newCard.ID, saveCardsToJson(cards)
 }
 
 func readCardsFromJson() ([]CardData, error) {
@@ -113,14 +113,30 @@ func readCardsFromJson() ([]CardData, error) {
 	return cards, nil
 }
 
-func updateCardById(id string, card CardData) error {
+func updateCardById(id string, req UpdateCardDataRequest) error {
 	cards, err := readCardsFromJson()
 	if err != nil {
 		return err
 	}
 	for i, cardData := range cards {
 		if cardData.ID == id {
-			cards[i] = card
+			artwork := req.Artwork
+			if len(req.ImageBytes) > 0 {
+				name, err := saveArtIfMissing(req.ImageBytes, req.ImageExt)
+				if err != nil {
+					return err
+				}
+				artwork = name
+			}
+			cards[i] = CardData{
+				ID:          id,
+				Name:        req.Name,
+				TypeLine:    req.TypeLine,
+				Description: req.Description,
+				FooterText:  req.FooterText,
+				Rarity:      req.Rarity,
+				Artwork:     artwork,
+			}
 			return saveCardsToJson(cards)
 		}
 	}

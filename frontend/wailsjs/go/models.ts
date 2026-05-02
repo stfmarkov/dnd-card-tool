@@ -50,6 +50,32 @@ export namespace main {
 	        this.imageExt = source["imageExt"];
 	    }
 	}
+	export class UpdateCardDataRequest {
+	    name: string;
+	    typeLine: string;
+	    description: string;
+	    footerText: string;
+	    rarity: string;
+	    artwork: string;
+	    imageBytes: number[];
+	    imageExt: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new UpdateCardDataRequest(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.typeLine = source["typeLine"];
+	        this.description = source["description"];
+	        this.footerText = source["footerText"];
+	        this.rarity = source["rarity"];
+	        this.artwork = source["artwork"];
+	        this.imageBytes = source["imageBytes"];
+	        this.imageExt = source["imageExt"];
+	    }
+	}
 
 }
 
