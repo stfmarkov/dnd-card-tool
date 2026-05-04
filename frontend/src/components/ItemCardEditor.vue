@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import EditorField from './EditorField.vue';
 import EditorSection from './EditorSection.vue';
 import EditorUploader from './EditorUploader.vue';
@@ -48,6 +48,15 @@ watch(artwork, (newValue) => {
 });
 watch(rarity, (newValue) => {
     itemCardStore.setRarity(newValue);
+});
+
+onMounted(() => {
+    name.value = itemCardStore.name;
+    typeLine.value = itemCardStore.typeLine;
+    rarity.value = itemCardStore.rarity;
+    description.value = itemCardStore.description;
+    footerText.value = itemCardStore.footerText;
+    artwork.value = itemCardStore.artwork;
 });
 </script>
 
