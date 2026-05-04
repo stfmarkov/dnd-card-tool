@@ -84,6 +84,7 @@ export const useItemCardStore = defineStore('itemCard', {
       this.description = item.description
       this.footerText = item.footerText
       this.artwork = item.artwork
+      this.artworkSourceFile = null
       this.setIsSaved(true)
     },
     /** Clear all card fields; used from the OS / File / New card menu. */
@@ -103,38 +104,54 @@ export const useItemCardStore = defineStore('itemCard', {
      */
     async saveCard() {
       const generalStore = useGeneralStore()
+
+      // Snapshot all reactive state immediately — before any await — so that
+      // navigating to a different card while the async work is in-flight
+      // cannot mix this card's image bytes with the next card's metadata/id.
+      const snapId = this.id
+      const snapName = this.name
+      const snapTypeLine = this.typeLine
+      const snapDescription = this.description
+      const snapFooterText = this.footerText
+      const snapRarity = this.rarity
+      const snapSourceFile = this.artworkSourceFile
+      const snapArtwork = this.artwork
+
       try {
         let imageBytes: number[] = []
         let imageExt = '.png'
-        if (this.artworkSourceFile) {
-          const buf = await this.artworkSourceFile.arrayBuffer()
+        if (snapSourceFile) {
+          const buf = await snapSourceFile.arrayBuffer()
           imageBytes = Array.from(new Uint8Array(buf))
-          imageExt = extFromFilename(this.artworkSourceFile.name)
-        } else if (this.artwork.startsWith('blob:')) {
-          const buf = await fetch(this.artwork).then((r) => r.arrayBuffer())
+          imageExt = extFromFilename(snapSourceFile.name)
+        } else if (snapArtwork.startsWith('blob:')) {
+          const buf = await fetch(snapArtwork).then((r) => r.arrayBuffer())
           imageBytes = Array.from(new Uint8Array(buf))
           imageExt = '.png'
         }
 
         const payload = {
-          name: this.name,
-          typeLine: this.typeLine,
-          description: this.description,
-          footerText: this.footerText,
-          rarity: this.rarity,
+          name: snapName,
+          typeLine: snapTypeLine,
+          description: snapDescription,
+          footerText: snapFooterText,
+          rarity: snapRarity,
           artwork: '',
           imageBytes,
           imageExt,
         }
 
-        if (this.id) {
-          await UpdateCardData(this.id, payload)
+        if (snapId) {
+          await UpdateCardData(snapId, payload)
         } else {
           const newId = await SaveCardData(payload)
-          this.id = newId
+          // Only write back the id if the user hasn't switched to a different
+          // card while this save was in-flight.
+          if (!this.id) this.id = newId
         }
 
-        generalStore.setToast({ title: 'Card saved', message: this.name || '', type: 'success' })
+        this.artworkSourceFile = null
+        generalStore.setToast({ title: 'Card saved', message: snapName || '', type: 'success' })
         this.setIsSaved(true)
       } catch (e) {
         generalStore.setToast({ title: 'Save failed', message: String(e), type: 'error' })

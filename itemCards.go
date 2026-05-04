@@ -120,13 +120,16 @@ func updateCardById(id string, req UpdateCardDataRequest) error {
 	}
 	for i, cardData := range cards {
 		if cardData.ID == id {
-			artwork := req.Artwork
+			artwork := cardData.Artwork // preserve existing filename by default
 			if len(req.ImageBytes) > 0 {
 				name, err := saveArtIfMissing(req.ImageBytes, req.ImageExt)
 				if err != nil {
 					return err
 				}
 				artwork = name
+			} else if req.Artwork != "" {
+				// explicit filename supplied (e.g. future "clear artwork" feature)
+				artwork = req.Artwork
 			}
 			cards[i] = CardData{
 				ID:          id,
