@@ -60,9 +60,17 @@ export const useItemCardStore = defineStore('itemCard', {
     setRarity(rarity: string) {
       this.rarity = rarity
     },
+    setSelectedItem(item: ItemCard) {
+      this.id = item.id
+      this.name = item.name
+      this.typeLine = item.typeLine
+      this.rarity = item.rarity
+      this.description = item.description
+      this.footerText = item.footerText
+      this.artwork = item.artwork
+    },
     /** Clear all card fields; used from the OS / File / New card menu. */
     newCard() {
-      console.log('newCard')
       this.id = ''
       this.name = 'Item Name'
       this.typeLine = 'Wondrous item'

@@ -7,6 +7,7 @@ import { useItemCardStore } from '../store/itemCard';
 import { useGeneralStore } from '../store/general';
 import { EventsOn, EventsOff } from '../../wailsjs/runtime/runtime';
 import { printCard } from '../utils/printCard';
+import { toBase64Src } from '../utils/toBase64Src';
 
 const itemCardStore = useItemCardStore();
 const generalStore = useGeneralStore();
@@ -17,7 +18,12 @@ const description = computed(() => itemCardStore.description || '<p>This is a <b
 const footerText = computed(() => itemCardStore.footerText || 'D&amp;D 5e — item card (preview)')
 const rarity = computed(() => itemCardStore.rarity || 'common')
 
-const artSrc = computed(() => itemCardStore.artwork || placeholderUrl)
+const artSrc = computed(() => {
+  if (!itemCardStore.artwork.includes('blob:')) {
+    return toBase64Src(itemCardStore.artwork)
+  }
+  return itemCardStore.artwork || placeholderUrl
+})
 
 EventsOn('menu:action', async (event) => {
   if (event !== 'print-card') return

@@ -1,22 +1,17 @@
 <script lang="ts" setup>
 import type { ItemCard } from '../store/itemCard';
 import { computed } from 'vue';
-import placeholderUrl from '../assets/images/placeholder.svg?url';
+import { toBase64Src } from '../utils/toBase64Src';
 
 const props = defineProps<{
     item: ItemCard;
 }>();
 
-/** Backend fills `artwork` with raw base64; empty when read failed or no art. */
-const artSrc = computed(() => {
-    const raw = props.item.artwork?.trim()
-    if (!raw) return placeholderUrl
-    return `data:image/png;base64,${raw}`
-})
-
 const rarityLabel = computed(() =>
     (props.item.rarity || 'common').toLowerCase().replace(/\s+/g, '-')
 )
+
+const artSrc = computed(() => toBase64Src(props.item.artwork));
 
 </script>
 

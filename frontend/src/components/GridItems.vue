@@ -2,10 +2,20 @@
 import { computed } from 'vue';
 import { useItemCardsStore } from '../store/itemCards';
 import GridItem from './GridItem.vue';
+import type { ItemCard } from '../store/itemCard';
+import { useGeneralStore } from '../store/general';
+import { useItemCardStore } from '../store/itemCard';
 
+const generalStore = useGeneralStore()
+const itemCardStore = useItemCardStore()
 const itemCardsStore = useItemCardsStore()
 
 const items = computed(() => itemCardsStore.items)
+
+const selectForEdit = (item: ItemCard) => {
+    generalStore.setSelectedLayout('main')
+    itemCardStore.setSelectedItem(item)
+}
 
 </script>
 
@@ -21,7 +31,7 @@ const items = computed(() => itemCardsStore.items)
         </p>
 
         <div v-else class="grid-page__grid" role="list">
-            <GridItem v-for="item in items" :key="item.id || item.name" :item="item" />
+            <GridItem v-for="item in items" :key="item.id || item.name" :item="item" @click="selectForEdit(item)" />
         </div>
     </div>
 </template>
