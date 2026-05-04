@@ -18,6 +18,8 @@ const description = computed(() => itemCardStore.description || '<p>This is a <b
 const footerText = computed(() => itemCardStore.footerText || 'D&amp;D 5e — item card (preview)')
 const rarity = computed(() => itemCardStore.rarity || 'common')
 
+const cardId = computed(() => itemCardStore.id)
+
 const artSrc = computed(() => {
   if (!itemCardStore.artwork.includes('blob:')) {
     return toBase64Src(itemCardStore.artwork)
@@ -43,6 +45,10 @@ onUnmounted(() => {
 
 <template>
   <div class="item-card__container">
+    <p class="item-card__status" :class="cardId ? 'item-card__status--id' : 'item-card__status--new'">
+      <template v-if="cardId">ID: {{ cardId }}</template>
+      <template v-else>New item</template>
+    </p>
     <div class="item-card__card" role="article" aria-label="Item card preview">
       <header class="item-card__header">
         <div class="item-card__header-bar">
@@ -73,11 +79,30 @@ onUnmounted(() => {
 .item-card__container {
   min-height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: var(--ds-space-4);
   box-sizing: border-box;
   background: var(--ds-workspace-bg);
+  gap: var(--ds-space-2);
+}
+
+.item-card__status {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.item-card__status--id {
+  color: var(--ds-gold);
+}
+
+.item-card__status--new {
+  color: #6dbf7e;
 }
 
 /* Poker-style aspect — printable without odd stretching */
@@ -228,6 +253,10 @@ onUnmounted(() => {
   .item-card__container {
     background: none;
     padding: 0;
+  }
+
+  .item-card__status {
+    display: none;
   }
 
   .item-card__card {

@@ -6,6 +6,7 @@ import type { ItemCard } from '../store/itemCard';
 import { useGeneralStore } from '../store/general';
 import { useItemCardStore } from '../store/itemCard';
 import { useConfirmationStore } from '../store/confirmationStore';
+import ButtonMain from './utils/buttons/ButtonMain.vue';
 
 const generalStore = useGeneralStore()
 const itemCardStore = useItemCardStore()
@@ -55,6 +56,11 @@ const deleteItem = (item: ItemCard) => {
     })
 }
 
+const createNewCard = () => {
+    generalStore.setSelectedLayout('main')
+    itemCardStore.newCard()
+}
+
 </script>
 
 <template>
@@ -64,9 +70,10 @@ const deleteItem = (item: ItemCard) => {
             <p class="grid-page__subtitle">Saved item cards</p>
         </header>
 
-        <p v-if="items.length === 0" class="grid-page__empty">
-            No cards yet. Create one in the editor and save.
-        </p>
+        <div v-if="items.length === 0" class="grid-page__empty">
+            <p>No cards yet. Create one in the editor and save.</p>
+            <ButtonMain @click="createNewCard" text="Create new card" type="primary" />
+        </div>
 
         <div v-else class="grid-page__grid" role="list">
             <GridItem v-for="item in items" :key="item.id || item.name" :item="item" @click="selectForEdit(item)"
