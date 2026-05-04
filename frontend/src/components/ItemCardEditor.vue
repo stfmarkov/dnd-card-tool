@@ -4,11 +4,8 @@ import EditorField from './EditorField.vue';
 import EditorSection from './EditorSection.vue';
 import EditorUploader from './EditorUploader.vue';
 import { useItemCardStore } from '../store/itemCard';
-import { EventsOn } from '../../wailsjs/runtime/runtime';
-import { useConfirmationStore } from '../store/confirmationStore';
 
 const itemCardStore = useItemCardStore();
-const confirmationStore = useConfirmationStore();
 
 const name = computed({ get: () => itemCardStore.name, set: (v: string) => itemCardStore.setName(v) });
 const typeLine = computed({ get: () => itemCardStore.typeLine, set: (v: string) => itemCardStore.setTypeLine(v) });
@@ -16,28 +13,6 @@ const rarity = computed({ get: () => itemCardStore.rarity, set: (v: string) => i
 const description = computed({ get: () => itemCardStore.description, set: (v: string) => itemCardStore.setDescription(v) });
 const footerText = computed({ get: () => itemCardStore.footerText, set: (v: string) => itemCardStore.setFooterText(v) });
 const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) => itemCardStore.setArtwork(v) });
-
-EventsOn('menu:action', (event) => {
-    if (event === 'new-card') {
-        if (!itemCardStore.isSaved) {
-            confirmationStore.setConfirmation({
-                title: 'Unsaved changes',
-                message: 'You have unsaved changes. Are you sure you want to create a new card?',
-                onConfirm: () => { itemCardStore.newCard(); },
-                onCancel: () => { },
-                type: 'warning',
-                show: true,
-                confirmText: 'Create new card',
-                cancelText: 'Cancel',
-            });
-        } else {
-            itemCardStore.newCard();
-        }
-    }
-    if (event === 'save-card') {
-        void itemCardStore.saveCard();
-    }
-});
 </script>
 
 <template>
