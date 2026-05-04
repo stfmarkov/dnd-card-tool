@@ -28,10 +28,6 @@ func buildAppMenu(a *App) *menu.Menu {
 		runtime.EventsEmit(a.ctx, "menu:action", "new-card")
 	})
 
-	file.AddText("Open card…", keys.CmdOrCtrl("o"), func(_ *menu.CallbackData) {
-		runtime.EventsEmit(a.ctx, "menu:action", "open-card")
-	})
-
 	file.AddText("Save card…", keys.CmdOrCtrl("s"), func(_ *menu.CallbackData) {
 		runtime.EventsEmit(a.ctx, "menu:action", "save-card")
 	})
