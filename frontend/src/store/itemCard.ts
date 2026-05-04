@@ -19,8 +19,12 @@ export interface ItemCard {
   rarity: string;
 }
 
+interface ItemCardState extends ItemCard {
+  isSaved: boolean;
+}
+
 export const useItemCardStore = defineStore('itemCard', {
-  state: (): ItemCard => ({
+  state: (): ItemCardState => ({
     id: '',
     name: '',
     typeLine: '',
@@ -30,19 +34,25 @@ export const useItemCardStore = defineStore('itemCard', {
     /** Last picked image file for save (hash + dedup on disk); cleared when artwork is cleared. */
     artworkSourceFile: null as File | null,
     rarity: '',
+
+    isSaved: true,
   }),
   actions: {
     setName(name: string) {
       this.name = name
+      this.setIsSaved(false)
     },
     setTypeLine(typeLine: string) {
       this.typeLine = typeLine
+      this.setIsSaved(false)
     },
     setDescription(description: string) {
       this.description = description
+      this.setIsSaved(false)
     },
     setFooterText(footerText: string) {
       this.footerText = footerText
+      this.setIsSaved(false)
     },
     /** Replace artwork URL; revokes a previous `blob:` URL so the WebView can release the file. */
     setArtwork(artwork: string) {
@@ -53,12 +63,18 @@ export const useItemCardStore = defineStore('itemCard', {
       if (!artwork) {
         this.artworkSourceFile = null
       }
+      this.setIsSaved(false)
     },
     setArtworkSourceFile(file: File | null) {
       this.artworkSourceFile = file
+      this.setIsSaved(false)
     },
     setRarity(rarity: string) {
       this.rarity = rarity
+      this.setIsSaved(false)
+    },
+    setIsSaved(isSaved: boolean) {
+      this.isSaved = isSaved
     },
     setSelectedItem(item: ItemCard) {
       this.id = item.id
@@ -68,6 +84,7 @@ export const useItemCardStore = defineStore('itemCard', {
       this.description = item.description
       this.footerText = item.footerText
       this.artwork = item.artwork
+      this.setIsSaved(true)
     },
     /** Clear all card fields; used from the OS / File / New card menu. */
     newCard() {
@@ -78,6 +95,7 @@ export const useItemCardStore = defineStore('itemCard', {
       this.description = '<p>This is a <b>cool</b> description of the item. Flavor text can run a few lines and stay readable on print.</p>'
       this.footerText = 'D&amp;D 5e — item card (preview)'
       this.setArtwork('')
+      this.setIsSaved(false)
     },
     /**
      * Saves the current card. On the first save, appends a new row and stores the returned ID.
@@ -117,6 +135,7 @@ export const useItemCardStore = defineStore('itemCard', {
         }
 
         generalStore.setToast({ title: 'Card saved', message: this.name || '', type: 'success' })
+        this.setIsSaved(true)
       } catch (e) {
         generalStore.setToast({ title: 'Save failed', message: String(e), type: 'error' })
       }

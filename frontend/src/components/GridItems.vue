@@ -15,8 +15,27 @@ const confirmationStore = useConfirmationStore()
 const items = computed(() => itemCardsStore.items)
 
 const selectForEdit = (item: ItemCard) => {
-    generalStore.setSelectedLayout('main')
-    itemCardStore.setSelectedItem(item)
+    const execute = () => {
+        generalStore.setSelectedLayout('main')
+        itemCardStore.setSelectedItem(item)
+    }
+
+    if (!itemCardStore.isSaved) {
+        confirmationStore.setConfirmation({
+            title: 'Unsaved changes',
+            message: 'You have unsaved changes. Are you sure you want to edit this item?',
+            onConfirm: () => {
+                execute()
+            },
+            onCancel: () => { },
+            type: 'warning',
+            show: true,
+            confirmText: 'Edit item',
+            cancelText: 'Cancel',
+        })
+    } else {
+        execute()
+    }
 }
 
 const deleteItem = (item: ItemCard) => {
@@ -50,7 +69,8 @@ const deleteItem = (item: ItemCard) => {
         </p>
 
         <div v-else class="grid-page__grid" role="list">
-            <GridItem v-for="item in items" :key="item.id || item.name" :item="item" @click="selectForEdit(item)" @delete="deleteItem(item)" />
+            <GridItem v-for="item in items" :key="item.id || item.name" :item="item" @click="selectForEdit(item)"
+                @delete="deleteItem(item)" />
         </div>
     </div>
 </template>

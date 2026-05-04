@@ -1,62 +1,42 @@
 <script lang="ts" setup>
-import { ref, watch, onMounted } from 'vue'
+import { computed } from 'vue'
 import EditorField from './EditorField.vue';
 import EditorSection from './EditorSection.vue';
 import EditorUploader from './EditorUploader.vue';
 import { useItemCardStore } from '../store/itemCard';
 import { EventsOn } from '../../wailsjs/runtime/runtime';
+import { useConfirmationStore } from '../store/confirmationStore';
 
 const itemCardStore = useItemCardStore();
+const confirmationStore = useConfirmationStore();
 
-// Local values so the form is usable in the layout; not wired to the preview or uploads yet.
-const name = ref('')
-const typeLine = ref('')
-const rarity = ref('')
-const description = ref('')
-const footerText = ref('')
-const artwork = ref('');
+const name = computed({ get: () => itemCardStore.name, set: (v: string) => itemCardStore.setName(v) });
+const typeLine = computed({ get: () => itemCardStore.typeLine, set: (v: string) => itemCardStore.setTypeLine(v) });
+const rarity = computed({ get: () => itemCardStore.rarity, set: (v: string) => itemCardStore.setRarity(v) });
+const description = computed({ get: () => itemCardStore.description, set: (v: string) => itemCardStore.setDescription(v) });
+const footerText = computed({ get: () => itemCardStore.footerText, set: (v: string) => itemCardStore.setFooterText(v) });
+const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) => itemCardStore.setArtwork(v) });
 
 EventsOn('menu:action', (event) => {
     if (event === 'new-card') {
-        itemCardStore.newCard();
-        name.value = '';
-        typeLine.value = '';
-        rarity.value = '';
-        description.value = '';
-        footerText.value = '';
-        artwork.value = '';
+        if (!itemCardStore.isSaved) {
+            confirmationStore.setConfirmation({
+                title: 'Unsaved changes',
+                message: 'You have unsaved changes. Are you sure you want to create a new card?',
+                onConfirm: () => { itemCardStore.newCard(); },
+                onCancel: () => { },
+                type: 'warning',
+                show: true,
+                confirmText: 'Create new card',
+                cancelText: 'Cancel',
+            });
+        } else {
+            itemCardStore.newCard();
+        }
     }
     if (event === 'save-card') {
         void itemCardStore.saveCard();
     }
-});
-
-watch(name, (newValue) => {
-    itemCardStore.setName(newValue);
-});
-watch(typeLine, (newValue) => {
-    itemCardStore.setTypeLine(newValue);
-});
-watch(description, (newValue) => {
-    itemCardStore.setDescription(newValue);
-});
-watch(footerText, (newValue) => {
-    itemCardStore.setFooterText(newValue);
-});
-watch(artwork, (newValue) => {
-    itemCardStore.setArtwork(newValue);
-});
-watch(rarity, (newValue) => {
-    itemCardStore.setRarity(newValue);
-});
-
-onMounted(() => {
-    name.value = itemCardStore.name;
-    typeLine.value = itemCardStore.typeLine;
-    rarity.value = itemCardStore.rarity;
-    description.value = itemCardStore.description;
-    footerText.value = itemCardStore.footerText;
-    artwork.value = itemCardStore.artwork;
 });
 </script>
 
