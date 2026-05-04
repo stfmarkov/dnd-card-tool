@@ -90,6 +90,9 @@ func (a *App) GetCardData() ([]CardData, error) {
 	}
 
 	for i, card := range cards {
+		if card.Artwork == "" {
+			continue
+		}
 		userConfigDir, err := os.UserConfigDir()
 		if err != nil {
 			return nil, err

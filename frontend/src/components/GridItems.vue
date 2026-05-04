@@ -5,16 +5,35 @@ import GridItem from './GridItem.vue';
 import type { ItemCard } from '../store/itemCard';
 import { useGeneralStore } from '../store/general';
 import { useItemCardStore } from '../store/itemCard';
+import { useConfirmationStore } from '../store/confirmationStore';
 
 const generalStore = useGeneralStore()
 const itemCardStore = useItemCardStore()
 const itemCardsStore = useItemCardsStore()
+const confirmationStore = useConfirmationStore()
 
 const items = computed(() => itemCardsStore.items)
 
 const selectForEdit = (item: ItemCard) => {
     generalStore.setSelectedLayout('main')
     itemCardStore.setSelectedItem(item)
+}
+
+const deleteItem = (item: ItemCard) => {
+    confirmationStore.setConfirmation({
+        title: 'Delete item',
+        message: 'Are you sure you want to delete this item?',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        type: 'error',
+        show: true,
+        onCancel: () => {
+            console.log('cancel delete item', item)
+        },
+        onConfirm: () => {
+            itemCardsStore.deleteItem(item)
+        }
+    })
 }
 
 </script>
@@ -31,7 +50,7 @@ const selectForEdit = (item: ItemCard) => {
         </p>
 
         <div v-else class="grid-page__grid" role="list">
-            <GridItem v-for="item in items" :key="item.id || item.name" :item="item" @click="selectForEdit(item)" />
+            <GridItem v-for="item in items" :key="item.id || item.name" :item="item" @click="selectForEdit(item)" @delete="deleteItem(item)" />
         </div>
     </div>
 </template>

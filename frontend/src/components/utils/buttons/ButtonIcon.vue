@@ -1,7 +1,10 @@
 <script lang="ts" setup>
+const props = defineProps<{
+    empty?: boolean
+}>()
 </script>
 <template>
-    <button class="button-icon">
+    <button class="button-icon" :class="{ 'button-icon--empty': empty }">
         <slot />
     </button>
 </template>
@@ -19,5 +22,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+.button-icon--empty {
+    background-color: transparent;
 }
 </style>

@@ -2,16 +2,35 @@
 import type { ItemCard } from '../store/itemCard';
 import { computed } from 'vue';
 import { toBase64Src } from '../utils/toBase64Src';
+import DropdownMenu from './utils/DropdownMenu.vue';
 
 const props = defineProps<{
     item: ItemCard;
 }>();
+
+const emit = defineEmits<{
+    (e: 'click'): void
+    (e: 'delete'): void
+}>()
 
 const rarityLabel = computed(() =>
     (props.item.rarity || 'common').toLowerCase().replace(/\s+/g, '-')
 )
 
 const artSrc = computed(() => toBase64Src(props.item.artwork));
+
+const items = [
+    { label: 'Edit', value: 'edit' },
+    { label: 'Delete', value: 'delete' }
+]
+
+const handleItemClick = (value: string) => {
+    if (value === 'edit') {
+        emit('click');
+    } else if (value === 'delete') {
+        emit('delete');
+    }
+}
 
 </script>
 
@@ -22,6 +41,7 @@ const artSrc = computed(() => toBase64Src(props.item.artwork));
         </div>
         <div class="grid-card__bar">
             <h2 class="grid-card__name">{{ item.name || 'Untitled' }}</h2>
+            <DropdownMenu horizontal="left" :items="items" @selected="handleItemClick"/>
         </div>
         <p class="grid-card__type">{{ item.typeLine }}</p>
     </article>
@@ -32,7 +52,6 @@ const artSrc = computed(() => toBase64Src(props.item.artwork));
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    overflow: hidden;
     background: var(--ds-workspace-bg-elevated);
     border: 1px solid var(--ds-workspace-border);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(196, 160, 58, 0.12);
@@ -65,6 +84,9 @@ const artSrc = computed(() => toBase64Src(props.item.artwork));
     background: linear-gradient(180deg, var(--ds-burgundy-mid), var(--ds-burgundy));
     padding: var(--ds-space-2) var(--ds-space-3);
     border-top: 1px solid rgba(196, 160, 58, 0.25);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .grid-card__name {

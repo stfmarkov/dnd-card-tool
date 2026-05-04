@@ -9,6 +9,7 @@ import GridLayout from './components/Layouts/grid.vue'
 import { useGeneralStore } from './store/general'
 import type { Layout } from './store/general'
 import { useItemCardsStore } from './store/itemCards'
+import Confirmation from './components/utils/popups/Confirmation.vue'
 
 const generalStore = useGeneralStore()
 const itemCardsStore = useItemCardsStore()
@@ -57,6 +58,7 @@ onMounted(async () => {
 <template>
   <component :is="selectedLayoutComponent" />
   <NavigationMenu />
+  <Confirmation />
   <Toast />
 </template>
 
