@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ItemCard } from './itemCard'
 import { DeleteCardData } from '../../wailsjs/go/main/App'
+import { useItemCardStore } from './itemCard'
 
 export type Layout = 'main' | 'grid'
 
@@ -13,6 +14,16 @@ export const useItemCardsStore = defineStore('itemCards', {
             this.items = items
         },
         deleteItem(item: ItemCard) {
+
+            const currentItem = useItemCardStore()
+
+            console.log(currentItem.id)
+            console.log(item.id)
+
+            if(currentItem.id === item.id) {
+                currentItem.newCard()
+            }
+
             this.items = this.items.filter(i => i.id !== item.id)
             DeleteCardData(item.id)
         }
