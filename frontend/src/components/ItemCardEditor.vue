@@ -4,6 +4,7 @@ import Field from './utils/Field.vue';
 import Select from './utils/Select.vue';
 import EditorSection from './EditorSection.vue';
 import EditorUploader from './EditorUploader.vue';
+import DescriptionEditor from './DescriptionEditor.vue';
 import { useItemCardStore } from '../store/itemCard';
 import { rarityOptions, typeOptions } from '../utils/cardOptions';
 
@@ -31,8 +32,7 @@ const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) =>
             </EditorSection>
 
             <EditorSection title="Description">
-                <Field type="textarea" label="Text" placeholder="Properties, charge rules, flavor …"
-                    v-model="description" />
+                <DescriptionEditor label="Text" v-model="description" />
             </EditorSection>
 
             <EditorSection title="Footer">
