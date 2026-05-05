@@ -13,6 +13,7 @@ const typeLine = computed(() => itemCardStore.typeLine || 'Wondrous item')
 const description = computed(() => itemCardStore.description || '<p>This is a <b>cool</b> description of the item. Flavor text can run a few lines and stay readable on print.</p>')
 const footerText = computed(() => itemCardStore.footerText || 'D&amp;D 5e — item card (preview)')
 const rarity = computed(() => itemCardStore.rarity || 'common')
+const rarityClass = computed(() => `item-card__type-line--${rarity.value.replace(/\s+/g, '-')}`)
 
 const cardId = computed(() => itemCardStore.id)
 
@@ -36,7 +37,9 @@ const artSrc = computed(() => {
         <div class="item-card__header-bar">
           <h2 class="item-card__title">{{ name }}</h2>
         </div>
-        <p class="item-card__type-line">{{ typeLine }}, {{ rarity }}</p>
+        <p class="item-card__type-line" :class="rarityClass">
+          {{ typeLine }}, {{ rarity }}
+        </p>
       </header>
 
       <div class="item-card__body">
@@ -140,6 +143,30 @@ const artSrc = computed(() => {
   color: var(--ds-ink-muted);
   background: var(--ds-parchment-dark);
   border-bottom: 1px solid var(--ds-hairline);
+}
+
+/* Rarity colour tokens — applied to both the type and rarity spans */
+.item-card__type-line--common {
+  color: var(--ds-ink-muted);
+}
+.item-card__type-line--uncommon {
+  color: var(--ds-tint-uncommon);
+}
+
+.item-card__type-line--rare {
+  color: var(--ds-tint-rare);
+}
+
+.item-card__type-line--very-rare {
+  color: var(--ds-tint-very-rare);
+}
+
+.item-card__type-line--legendary {
+  color: var(--ds-tint-legendary);
+}
+
+.item-card__type-line--artifact {
+  color: var(--ds-tint-artifact);
 }
 
 .item-card__body {
