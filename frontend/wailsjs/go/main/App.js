@@ -6,6 +6,10 @@ export function DeleteCardData(arg1) {
   return window['go']['main']['App']['DeleteCardData'](arg1);
 }
 
+export function DuplicateCardData(arg1) {
+  return window['go']['main']['App']['DuplicateCardData'](arg1);
+}
+
 export function GetCardData() {
   return window['go']['main']['App']['GetCardData']();
 }

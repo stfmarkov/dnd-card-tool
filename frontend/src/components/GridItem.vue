@@ -11,6 +11,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     (e: 'click'): void
     (e: 'delete'): void
+    (e: 'duplicate'): void
 }>()
 
 const rarityLabel = computed(() =>
@@ -21,14 +22,21 @@ const artSrc = computed(() => toBase64Src(props.item.artwork));
 
 const items = [
     { label: 'Edit', value: 'edit' },
-    { label: 'Delete', value: 'delete' }
+    { label: 'Delete', value: 'delete' },
+    { label: 'Duplicate', value: 'duplicate' }
 ]
 
 const handleItemClick = (value: string) => {
-    if (value === 'edit') {
-        emit('click');
-    } else if (value === 'delete') {
-        emit('delete');
+    switch (value) {
+        case 'edit':
+            emit('click');
+            break;
+        case 'delete':
+            emit('delete');
+            break;
+        case 'duplicate':
+            emit('duplicate');
+            break;
     }
 }
 

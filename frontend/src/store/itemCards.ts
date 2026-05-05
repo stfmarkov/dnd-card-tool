@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ItemCard } from './itemCard'
-import { DeleteCardData } from '../../wailsjs/go/main/App'
+import { DeleteCardData, DuplicateCardData, GetCardData } from '../../wailsjs/go/main/App'
 import { useItemCardStore } from './itemCard'
+import { useGeneralStore } from './general'
 
 export type Layout = 'main' | 'grid'
 
@@ -10,6 +11,33 @@ export const useItemCardsStore = defineStore('itemCards', {
         items: [] as ItemCard[],
     }),
     actions: {
+
+        async getItems() {
+            const items = await GetCardData()
+            this.items = items.map(item => ({
+                id: item.id,
+                name: item.name,
+                typeLine: item.typeLine,
+                description: item.description,
+                footerText: item.footerText,
+                artwork: item.artwork,
+                artworkSourceFile: null,
+                rarity: item.rarity,
+            }))
+        },
+
+        async duplicateItem(item: ItemCard) {
+            const generalStore = useGeneralStore()
+            try {
+                await DuplicateCardData(item.id)
+                await this.getItems()
+
+                generalStore.setToast({ title: 'Card duplicated', message: item.name || '', type: 'success' })
+            } catch (e) {
+                generalStore.setToast({ title: 'Duplicate failed', message: String(e), type: 'error' })
+            }
+        },
+
         setItems(items: ItemCard[]) {
             this.items = items
         },
@@ -17,7 +45,7 @@ export const useItemCardsStore = defineStore('itemCards', {
 
             const currentItem = useItemCardStore()
 
-            if(currentItem.id === item.id) {
+            if (currentItem.id === item.id) {
                 currentItem.newCard()
             }
 

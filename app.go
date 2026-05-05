@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/base64"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -113,4 +114,9 @@ func (a *App) DeleteCardData(id string) error {
 
 func (a *App) UpdateCardData(id string, cardData UpdateCardDataRequest) error {
 	return updateCardById(id, cardData)
+}
+
+func (a *App) DuplicateCardData(id string) error {
+	fmt.Println("DuplicateCardData", id)
+	return duplicateCardById(id)
 }

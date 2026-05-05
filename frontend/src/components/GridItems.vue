@@ -55,6 +55,10 @@ const deleteItem = (item: ItemCard) => {
     })
 }
 
+const duplicateItem = (item: ItemCard) => {
+    void itemCardsStore.duplicateItem(item)
+}
+
 const createNewCard = () => {
     generalStore.setSelectedLayout('main')
     itemCardStore.newCard()
@@ -76,7 +80,7 @@ const createNewCard = () => {
 
         <div v-else class="grid-page__grid" role="list">
             <GridItem v-for="item in items" :key="item.id || item.name" :item="item" @click="selectForEdit(item)"
-                @delete="deleteItem(item)" />
+                @delete="deleteItem(item)" @duplicate="duplicateItem(item)" />
         </div>
     </div>
 </template>

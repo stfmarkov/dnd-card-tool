@@ -156,6 +156,6 @@ export const useItemCardStore = defineStore('itemCard', {
       } catch (e) {
         generalStore.setToast({ title: 'Save failed', message: String(e), type: 'error' })
       }
-    },
+    }
   }
 })

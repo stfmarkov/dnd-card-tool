@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import MainLayout from './components/Layouts/main.vue'
 import { onMounted, shallowRef, computed, watch } from 'vue'
-import { GetCardData } from '../wailsjs/go/main/App'
 import NavigationMenu from './components/NavigationMenu.vue'
 import Toast from './components/utils/Toast.vue'
 import type { Component } from 'vue';
@@ -35,32 +34,14 @@ const selectedLayout = computed(() => {
 watch(selectedLayout, (newLayout) => {
   selectedLayoutComponent.value = layouts[newLayout]
   if (newLayout === 'grid') {
-    getItems()
+    void itemCardsStore.getItems()
   }
 })
-
-const getItems = async () => {
-  const cards = await GetCardData()
-
-  itemCardsStore.setItems(cards.map(card => ({
-    id: card.id,
-    name: card.name,
-    typeLine: card.typeLine,
-    description: card.description,
-    footerText: card.footerText,
-    artwork: card.artwork,
-    artworkSourceFile: null,
-    rarity: card.rarity,
-  })))
-
-}
-
-
 
 onMounted(async () => {
   selectedLayoutComponent.value = MainLayout
 
-  await getItems()
+  await itemCardsStore.getItems()
 
   EventsOn('menu:action', async (event) => {
   if (event === 'print-card') {

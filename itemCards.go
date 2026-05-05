@@ -206,3 +206,20 @@ func deleteCardById(id string) error {
 	}
 	return errors.New("card not found")
 }
+
+func duplicateCardById(id string) error {
+	cards, err := readCardsFromJson()
+	if err != nil {
+		return err
+	}
+	for _, cardData := range cards {
+		fmt.Println("duplicateCardById", cardData.ID, id)
+		if cardData.ID == id {
+			newCard := cardData
+			newCard.ID = uuid.New().String()
+			cards = append(cards, newCard)
+			return saveCardsToJson(cards)
+		}
+	}
+	return errors.New("card not found")
+}
