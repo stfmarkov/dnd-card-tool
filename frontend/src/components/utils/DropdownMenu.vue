@@ -42,7 +42,9 @@ const closeMenu = () => {
 </script>
 
 <template>
-    <div class="dropdown-menu" :class="{ 'dropdown-menu--open': isOpen, 'dropdown-menu--position-top': verticalPosition === 'top', 'dropdown-menu--position-bottom': verticalPosition === 'bottom', 'dropdown-menu--position-left': horizontalPosition === 'left', 'dropdown-menu--position-right': horizontalPosition === 'right' }" @mouseleave="closeMenu">
+    <div class="dropdown-menu"
+        :class="{ 'dropdown-menu--open': isOpen, 'dropdown-menu--position-top': verticalPosition === 'top', 'dropdown-menu--position-bottom': verticalPosition === 'bottom', 'dropdown-menu--position-left': horizontalPosition === 'left', 'dropdown-menu--position-right': horizontalPosition === 'right' }"
+        @mouseleave="closeMenu">
         <ButtonIcon empty @click.stop.prevent="openMenu">
             <IconsVerticalDots />
         </ButtonIcon>
@@ -60,43 +62,54 @@ const closeMenu = () => {
     position: relative;
 }
 
+.button-icon {
+    position: relative;
+    z-index: 1001;
+}
+
 .dropdown-menu--position-top .dropdown-menu__content {
-    bottom: 100%;
+    bottom: calc(100% - 1rem);
     top: auto;
 }
+
 .dropdown-menu--position-bottom .dropdown-menu__content {
-    top: 100%;
+    top: calc(100% - 1rem);
     bottom: auto;
 }
+
 .dropdown-menu--position-left .dropdown-menu__content {
-    right: 0%;
+    right: -1rem;
     left: auto;
 }
 
 .dropdown-menu--position-right .dropdown-menu__content {
-    left: 0%;
+    left: -1rem;
     right: auto;
 }
 
 .dropdown-menu__content {
     position: absolute;
-    top: 100%;
+    top: calc(100% - 1rem);
     left: 0;
-    background-color: var(--ds-parchment);
-    color: var(--ds-ink);
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-    border-radius: 4px;
     min-width: 100px;
     z-index: 1000;
     list-style: none;
     margin: 0;
-    padding: 4px;
     display: flex;
     flex-direction: column;
     gap: 4px;
     transition: opacity 0.3s ease-in-out;
     opacity: 0;
+    padding: 1rem;
     pointer-events: none;
+}
+
+.dropdown-menu__content ul {
+    background-color: var(--ds-parchment);
+    color: var(--ds-ink);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    padding: 4px;
 }
 
 .dropdown-menu__content li {
