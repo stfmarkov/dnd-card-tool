@@ -17,22 +17,17 @@ Infrastructure also shipped as part of this phase: `Confirmation.vue` modal with
 
 The app becomes publicly shareable after these land.
 
-### 1. Rich text editor for description
-The description field is a plain `<textarea>` today, but the stored value is already treated as HTML (the `newCard()` default is a `<p>` with `<b>` tags). Replace the textarea with a lightweight rich-text editor (e.g. [Tiptap](https://tiptap.dev/) or [Quill](https://quilljs.com/)) that supports:
-- Bold, italic, underline
-- Bullet lists (for charge rules, properties)
-- Inline dividers / section breaks
+### ~~1. Rich text editor for description~~ ✓
+Replaced the plain textarea with a [Tiptap](https://tiptap.dev/)-based editor featuring a floating bubble toolbar with bold and italic. Additional formatting options (underline, bullet lists, dividers) can be added on request. Raw HTML storage format unchanged.
 
-The raw HTML remains the storage format so nothing in the backend changes.
+### ~~2. Search & filter in the grid library~~ ✓
+Debounced name search plus rarity and type dropdowns in `GridItems`. Filters pass through to `GetCardData` on the backend; a separate "no results" empty state handles the filtered-but-empty case.
 
-### 2. Search & filter in the grid library
-Once a user has more than ~15 cards, browsing the grid without any filter becomes painful. Add a search bar (filter by name) and a rarity dropdown. These are client-side filters on the already-loaded `itemCards` store — no backend changes needed.
+### ~~3. Duplicate card~~ ✓
+"Duplicate" added to the `GridItem` dropdown alongside Edit / Delete. Calls `DuplicateCardData` on the backend, refreshes the grid, and shows a success toast.
 
-### 3. Duplicate card
-A "Duplicate" action on a `GridItem` dropdown (alongside the existing Edit / Delete) creates a copy with `id = ''` so it saves as a new row on the next save. Essential for creating variants of the same item.
-
-### 4. Rarity color accent on the preview card
-`GridItem` already applies `inset 3px 0 0 var(--ds-tint-*)` box-shadow accents for all rarity tiers. The same treatment should appear on the `ItemCardPreview` card so the exported PNG reflects rarity at a glance. The rarity value is already available as a computed in the preview component.
+### ~~4. Rarity color accent on the preview card~~ ✓
+The type line on `ItemCardPreview` is tinted using the same `--ds-tint-*` tokens as `GridItem`, giving a subtle rarity cue without altering the card's visual design. More expressive rarity treatments (border accents, backgrounds, etc.) are deferred to the card templates milestone where each template can define its own rarity language.
 
 ---
 
@@ -95,6 +90,6 @@ Reorder cards in the grid by dragging. Order is persisted to `cards.json` via an
 | Milestone | Status | What ships |
 |---|---|---|
 | **Pre-beta** | ✅ Shipped | Delete, unsaved-changes guard, new/editing indicator, empty grid state |
-| **Beta** | In progress | Rich text description, search/filter, duplicate, rarity on preview |
+| **Beta** | ✅ Shipped | Rich text description, search/filter, duplicate, rarity on preview |
 | **v1.0** | Planned | SRD browser, item effects, card templates (incl. two-sided), JSON import/export |
 | **v1.1** | Planned | Print sheet, tags, drag-to-reorder |
