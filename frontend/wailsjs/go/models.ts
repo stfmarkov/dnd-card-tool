@@ -24,6 +24,22 @@ export namespace main {
 	        this.artwork = source["artwork"];
 	    }
 	}
+	export class Filter {
+	    property: string;
+	    value: string;
+	    comparison: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Filter(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.property = source["property"];
+	        this.value = source["value"];
+	        this.comparison = source["comparison"];
+	    }
+	}
 	export class SaveCardDataRequest {
 	    name: string;
 	    typeLine: string;

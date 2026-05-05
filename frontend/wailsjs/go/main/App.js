@@ -10,8 +10,8 @@ export function DuplicateCardData(arg1) {
   return window['go']['main']['App']['DuplicateCardData'](arg1);
 }
 
-export function GetCardData() {
-  return window['go']['main']['App']['GetCardData']();
+export function GetCardData(arg1, arg2) {
+  return window['go']['main']['App']['GetCardData'](arg1, arg2);
 }
 
 export function SaveCardData(arg1) {

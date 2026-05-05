@@ -6,7 +6,7 @@ export function DeleteCardData(arg1:string):Promise<void>;
 
 export function DuplicateCardData(arg1:string):Promise<void>;
 
-export function GetCardData():Promise<Array<main.CardData>>;
+export function GetCardData(arg1:string,arg2:Array<main.Filter>):Promise<Array<main.CardData>>;
 
 export function SaveCardData(arg1:main.SaveCardDataRequest):Promise<string>;
 

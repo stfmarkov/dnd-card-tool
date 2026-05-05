@@ -6,14 +6,23 @@ import { useGeneralStore } from './general'
 
 export type Layout = 'main' | 'grid'
 
+interface Filter {
+    property: string
+    value: string
+    comparison: "eq" | "gte" | "lte"
+}
+
 export const useItemCardsStore = defineStore('itemCards', {
     state: () => ({
         items: [] as ItemCard[],
     }),
     actions: {
 
-        async getItems() {
-            const items = await GetCardData()
+        async getItems(search: string = '', filter: Filter[] = []) {
+
+
+
+            const items = await GetCardData(search, filter)
             this.items = items.map(item => ({
                 id: item.id,
                 name: item.name,

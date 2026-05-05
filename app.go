@@ -26,6 +26,12 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
+type Filter struct {
+	Property   string `json:"property"`
+	Value      string `json:"value"`
+	Comparison string `json:"comparison"`
+}
+
 type CardData struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
@@ -84,13 +90,25 @@ func (a *App) SaveCardData(cardData SaveCardDataRequest) (string, error) {
 	return addCard(cardData)
 }
 
-func (a *App) GetCardData() ([]CardData, error) {
+func (a *App) GetCardData(search string, filter []Filter) ([]CardData, error) {
 	cards, err := readCardsFromJson()
 	if err != nil {
 		return nil, err
 	}
 
-	for i, card := range cards {
+	filteredCards := []CardData{}
+
+	for _, card := range cards {
+		if !searchFilter(&card, search) {
+			continue
+		}
+		if !comparisonFilters(&card, filter) {
+			continue
+		}
+		filteredCards = append(filteredCards, card)
+	}
+
+	for i, card := range filteredCards {
 		if card.Artwork == "" {
 			continue
 		}
@@ -102,10 +120,10 @@ func (a *App) GetCardData() ([]CardData, error) {
 		if err != nil {
 			return nil, err
 		}
-		cards[i].Artwork = base64.StdEncoding.EncodeToString(artwork)
+		filteredCards[i].Artwork = base64.StdEncoding.EncodeToString(artwork)
 	}
 
-	return cards, nil
+	return filteredCards, nil
 }
 
 func (a *App) DeleteCardData(id string) error {
