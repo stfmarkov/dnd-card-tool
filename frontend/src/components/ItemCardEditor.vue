@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import EditorField from './EditorField.vue';
+import Field from './utils/Field.vue';
+import Select from './utils/Select.vue';
 import EditorSection from './EditorSection.vue';
 import EditorUploader from './EditorUploader.vue';
 import { useItemCardStore } from '../store/itemCard';
+import { rarityOptions, typeOptions } from '../utils/cardOptions';
 
 const itemCardStore = useItemCardStore();
 
@@ -19,10 +21,9 @@ const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) =>
     <div class="editor">
         <form class="editor__form" @submit.prevent>
             <EditorSection title="Name &amp; type">
-                <EditorField label="Item name" placeholder="E.g. Flame tongue" v-model="name" />
-                <EditorField label="Type line" placeholder="E.g. Weapon (longsword), rare (requires attunement)"
-                    v-model="typeLine" />
-                <EditorField label="Rarity" placeholder="E.g. rare" v-model="rarity" />
+                <Field label="Item name" placeholder="E.g. Flame tongue" v-model="name" />
+                <Select label="Item type" :options="typeOptions" v-model="typeLine" />
+                <Select label="Rarity" :options="rarityOptions" v-model="rarity" />
             </EditorSection>
 
             <EditorSection title="Artwork">
@@ -30,12 +31,12 @@ const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) =>
             </EditorSection>
 
             <EditorSection title="Description">
-                <EditorField type="textarea" label="Text" placeholder="Properties, charge rules, flavor …"
+                <Field type="textarea" label="Text" placeholder="Properties, charge rules, flavor …"
                     v-model="description" />
             </EditorSection>
 
             <EditorSection title="Footer">
-                <EditorField label="Footer line" placeholder="E.g. D&amp;D 5e — home game" v-model="footerText" />
+                <Field label="Footer line" placeholder="E.g. D&amp;D 5e — home game" v-model="footerText" />
             </EditorSection>
         </form>
     </div>

@@ -7,7 +7,6 @@ import type { Component } from 'vue';
 import GridLayout from './components/Layouts/grid.vue'
 import { useGeneralStore } from './store/general'
 import type { Layout } from './store/general'
-import { useItemCardsStore } from './store/itemCards'
 import Confirmation from './components/utils/popups/Confirmation.vue'
 import { EventsOn } from '../wailsjs/runtime/runtime';
 import { useItemCardStore } from './store/itemCard';
@@ -16,7 +15,6 @@ import { printCard } from './utils/printCard';
 
 
 const generalStore = useGeneralStore()
-const itemCardsStore = useItemCardsStore()
 const itemCardStore = useItemCardStore()
 const confirmationStore = useConfirmationStore()
 
@@ -33,15 +31,10 @@ const selectedLayout = computed(() => {
 
 watch(selectedLayout, (newLayout) => {
   selectedLayoutComponent.value = layouts[newLayout]
-  if (newLayout === 'grid') {
-    void itemCardsStore.getItems()
-  }
 })
 
-onMounted(async () => {
+onMounted(() => {
   selectedLayoutComponent.value = MainLayout
-
-  await itemCardsStore.getItems()
 
   EventsOn('menu:action', async (event) => {
   if (event === 'print-card') {

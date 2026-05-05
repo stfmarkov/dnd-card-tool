@@ -91,7 +91,7 @@ export const useItemCardStore = defineStore('itemCard', {
     newCard() {
       this.id = ''
       this.name = 'Item Name'
-      this.typeLine = 'Wondrous item'
+      this.typeLine = 'generic'
       this.rarity = 'common'
       this.description = '<p>This is a <b>cool</b> description of the item. Flavor text can run a few lines and stay readable on print.</p>'
       this.footerText = 'D&amp;D 5e — item card (preview)'

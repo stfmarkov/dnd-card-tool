@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref, watch, onMounted } from 'vue';
 import { useItemCardsStore } from '../store/itemCards';
 import GridItem from './GridItem.vue';
 import type { ItemCard } from '../store/itemCard';
@@ -7,6 +7,9 @@ import { useGeneralStore } from '../store/general';
 import { useItemCardStore } from '../store/itemCard';
 import { useConfirmationStore } from '../store/confirmationStore';
 import ButtonMain from './utils/buttons/ButtonMain.vue';
+import Field from './utils/Field.vue';
+import Select from './utils/Select.vue';
+import { rarityOptions as baseRarityOptions, typeOptions as baseTypeOptions } from '../utils/cardOptions';
 
 const generalStore = useGeneralStore()
 const itemCardStore = useItemCardStore()
@@ -14,6 +17,38 @@ const itemCardsStore = useItemCardsStore()
 const confirmationStore = useConfirmationStore()
 
 const items = computed(() => itemCardsStore.items)
+
+const search = ref('')
+const selectedRarity = ref('')
+const selectedType = ref('')
+
+const rarityOptions = [{ label: 'All rarities', value: '' }, ...baseRarityOptions]
+const typeOptions = [{ label: 'All types', value: '' }, ...baseTypeOptions]
+
+const hasActiveFilters = computed(() =>
+    search.value !== '' || selectedRarity.value !== '' || selectedType.value !== ''
+)
+
+const fetchItems = () => {
+    const filters = []
+    if (selectedRarity.value) {
+        filters.push({ property: 'rarity', value: selectedRarity.value, comparison: 'eq' as const })
+    }
+    if (selectedType.value) {
+        filters.push({ property: 'typeLine', value: selectedType.value, comparison: 'eq' as const })
+    }
+    void itemCardsStore.getItems(search.value, filters)
+}
+
+let searchDebounce: ReturnType<typeof setTimeout> | null = null
+watch(search, () => {
+    if (searchDebounce) clearTimeout(searchDebounce)
+    searchDebounce = setTimeout(fetchItems, 250)
+})
+watch(selectedRarity, fetchItems)
+watch(selectedType, fetchItems)
+
+onMounted(fetchItems)
 
 const selectForEdit = (item: ItemCard) => {
     const execute = () => {
@@ -25,9 +60,7 @@ const selectForEdit = (item: ItemCard) => {
         confirmationStore.setConfirmation({
             title: 'Unsaved changes',
             message: 'You have unsaved changes. Are you sure you want to edit this item?',
-            onConfirm: () => {
-                execute()
-            },
+            onConfirm: () => { execute() },
             onCancel: () => { },
             type: 'warning',
             show: true,
@@ -47,11 +80,8 @@ const deleteItem = (item: ItemCard) => {
         cancelText: 'Cancel',
         type: 'error',
         show: true,
-        onCancel: () => {
-        },
-        onConfirm: () => {
-            itemCardsStore.deleteItem(item)
-        }
+        onCancel: () => { },
+        onConfirm: () => { itemCardsStore.deleteItem(item) }
     })
 }
 
@@ -63,7 +93,6 @@ const createNewCard = () => {
     generalStore.setSelectedLayout('main')
     itemCardStore.newCard()
 }
-
 </script>
 
 <template>
@@ -73,9 +102,19 @@ const createNewCard = () => {
             <p class="grid-page__subtitle">Saved item cards</p>
         </header>
 
-        <div v-if="items.length === 0" class="grid-page__empty">
+        <div class="grid-page__toolbar">
+            <Field class="grid-page__search-field" v-model="search" placeholder="Search cards…" />
+            <Select v-model="selectedType" :options="typeOptions" />
+            <Select v-model="selectedRarity" :options="rarityOptions" />
+        </div>
+
+        <div v-if="items.length === 0 && !hasActiveFilters" class="grid-page__empty">
             <p>No cards yet. Create one in the editor and save.</p>
             <ButtonMain @click="createNewCard" text="Create new card" type="primary" />
+        </div>
+
+        <div v-else-if="items.length === 0" class="grid-page__empty grid-page__empty--no-results">
+            <p>No cards match your search.</p>
         </div>
 
         <div v-else class="grid-page__grid" role="list">
@@ -111,6 +150,17 @@ const createNewCard = () => {
     margin: 0;
     font-size: var(--ds-text-sm);
     color: var(--ds-workspace-muted);
+}
+
+.grid-page__toolbar {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--ds-space-3);
+    margin-bottom: var(--ds-space-5);
+}
+
+.grid-page__search-field {
+    flex: 1;
 }
 
 .grid-page__empty {

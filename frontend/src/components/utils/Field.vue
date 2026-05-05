@@ -3,14 +3,10 @@ import { ref, watch, computed } from 'vue';
 
 const props = defineProps<{
     type?: 'text' | 'textarea';
-    label: string;
-    placeholder: string;
+    label?: string;
+    placeholder?: string;
     modelValue: string;
 }>();
-
-const type = computed(() => {
-    return props.type || 'text';
-});
 
 const emit = defineEmits<{
     (e: 'update:modelValue', value: string): void;
@@ -30,30 +26,29 @@ watch(() => props.modelValue, (newValue) => {
     }
 });
 
-const id = computed(() => {
-    return props.label.toLowerCase().replace(' ', '-');
-});
-
+const id = computed(() =>
+    props.label ? props.label.toLowerCase().replace(/\s+/g, '-') : undefined
+);
 </script>
 
 <template>
-    <div class="editor-field">
-        <label :for="id" class="editor-field__label">{{ label }}</label>
-        <input v-if="type === 'text'" :id="id" v-model="value" type="text" class="editor-field__input"
+    <div class="field">
+        <label v-if="label" :for="id" class="field__label">{{ label }}</label>
+        <input v-if="!type || type === 'text'" :id="id" v-model="value" type="text" class="field__input"
             :placeholder="placeholder" autocomplete="off" />
-        <textarea v-else :id="id" v-model="value" class="editor-field__textarea" :placeholder="placeholder"
+        <textarea v-else :id="id" v-model="value" class="field__textarea" :placeholder="placeholder"
             autocomplete="off" />
     </div>
 </template>
 
 <style scoped>
-.editor-field {
+.field {
     display: flex;
     flex-direction: column;
     gap: var(--ds-space-1);
 }
 
-.editor-field__label {
+.field__label {
     font-size: var(--ds-text-xs);
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -61,8 +56,8 @@ const id = computed(() => {
     font-weight: 600;
 }
 
-.editor-field__input,
-.editor-field__textarea {
+.field__input,
+.field__textarea {
     width: 100%;
     box-sizing: border-box;
     padding: var(--ds-space-2) var(--ds-space-3);
@@ -76,25 +71,25 @@ const id = computed(() => {
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.editor-field__input::placeholder,
-.editor-field__textarea::placeholder {
+.field__input::placeholder,
+.field__textarea::placeholder {
     color: var(--ds-workspace-muted);
     opacity: 0.85;
 }
 
-.editor__input:hover,
-.editor-field__textarea:hover {
+.field__input:hover,
+.field__textarea:hover {
     border-color: rgba(200, 168, 100, 0.4);
 }
 
-.editor-field__input:focus,
-.editor-field__textarea:focus {
+.field__input:focus,
+.field__textarea:focus {
     outline: none;
     border-color: var(--ds-gold-mid);
     box-shadow: 0 0 0 1px var(--ds-gold-mid);
 }
 
-.editor-field__textarea {
+.field__textarea {
     min-height: 7.5rem;
     resize: vertical;
 }
