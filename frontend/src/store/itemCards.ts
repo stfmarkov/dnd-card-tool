@@ -17,9 +17,6 @@ export const useItemCardsStore = defineStore('itemCards', {
 
             const currentItem = useItemCardStore()
 
-            console.log(currentItem.id)
-            console.log(item.id)
-
             if(currentItem.id === item.id) {
                 currentItem.newCard()
             }

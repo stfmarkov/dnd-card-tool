@@ -63,7 +63,6 @@ onMounted(async () => {
   await getItems()
 
   EventsOn('menu:action', async (event) => {
-  console.log('menu:action', event)
   if (event === 'print-card') {
     try {
     const filename = await printCard('.item-card__card', `${itemCardStore.name}-${itemCardStore.typeLine}-${itemCardStore.rarity}`)
@@ -73,11 +72,7 @@ onMounted(async () => {
   }
   }
   if (event === 'new-card') {
-
-    console.log('new-card')
-
     const execute = () => {
-      console.log('execute')
       itemCardStore.newCard();
       generalStore.setSelectedLayout('main')
     }

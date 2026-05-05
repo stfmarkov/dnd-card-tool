@@ -48,7 +48,6 @@ const deleteItem = (item: ItemCard) => {
         type: 'error',
         show: true,
         onCancel: () => {
-            console.log('cancel delete item', item)
         },
         onConfirm: () => {
             itemCardsStore.deleteItem(item)
