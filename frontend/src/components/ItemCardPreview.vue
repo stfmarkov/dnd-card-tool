@@ -1,13 +1,19 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 /** Shipped placeholder when no art is set (user uploads are not in the build). */
 import placeholderUrl from '../assets/images/placeholder.svg?url'
 import { useItemCardStore } from '../store/itemCard';
 import { toBase64Src } from '../utils/toBase64Src';
+import Arrow from './Icons/arrow.vue';
+import ButtonIcon from './utils/buttons/ButtonIcon.vue';
+import IconExport from './Icons/export.vue';
+import IconNew from './Icons/new.vue';
+import IconSave from './Icons/save.vue';
+import { useCardActions } from '../composables/useCardActions';
 
 const itemCardStore = useItemCardStore();
-
+const { exportCard, newCard, saveCard } = useCardActions();
 const name = computed(() => itemCardStore.name || 'Item Name')
 const typeLine = computed(() => itemCardStore.typeLine || 'Wondrous item')
 const description = computed(() => itemCardStore.description || '<p>This is a <b>cool</b> description of the item. Flavor text can run a few lines and stay readable on print.</p>')
@@ -24,10 +30,32 @@ const artSrc = computed(() => {
   return itemCardStore.artwork || placeholderUrl
 })
 
+const isVisible = ref(false)
+
+const toggleVisibility = () => {
+  isVisible.value = !isVisible.value
+}
+
+
 </script>
 
 <template>
   <div class="item-card__container">
+    <div class="item-card__controls" :class="{ 'item-card__controls--visible': isVisible }">
+      <ButtonIcon @click="toggleVisibility" class="item-card__control item-card__control-0">
+        <Arrow direction="left" />
+      </ButtonIcon>
+
+      <ButtonIcon @click="exportCard" class="item-card__control item-card__control-1">
+        <IconExport />
+      </ButtonIcon>
+      <ButtonIcon @click="newCard" class="item-card__control item-card__control-2">
+        <IconNew />
+      </ButtonIcon>
+      <ButtonIcon @click="saveCard" class="item-card__control item-card__control-3">
+        <IconSave />
+      </ButtonIcon>
+    </div>
     <p class="item-card__status" :class="cardId ? 'item-card__status--id' : 'item-card__status--new'">
       <template v-if="cardId">ID: {{ cardId }}</template>
       <template v-else>New item</template>
@@ -71,6 +99,57 @@ const artSrc = computed(() => {
   box-sizing: border-box;
   background: var(--ds-workspace-bg);
   gap: var(--ds-space-2);
+}
+
+.item-card__controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: var(--ds-space-2);
+  z-index: 100;
+}
+
+.item-card__control {
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  top: 0;
+  right: 0;
+  --control-offset: 2.5rem;
+  transform: translateX(0);
+  opacity: 0;
+}
+
+.item-card__control-0 {
+  opacity: 1;
+}
+
+.item-card__control-1 {
+  z-index: -1;
+}
+
+.item-card__control-2 {
+  z-index: -2;
+}
+
+.item-card__control-3 {
+  z-index: -3;
+}
+
+.item-card__controls--visible .item-card__control {
+  opacity: 1;
+}
+
+.item-card__controls--visible .item-card__control-1 {
+  transform: translateX(calc(var(--control-offset) * -1));
+}
+
+.item-card__controls--visible .item-card__control-2 {
+  transform: translateX(calc(var(--control-offset) * -2));
+}
+
+.item-card__controls--visible .item-card__control-3 {
+  transform: translateX(calc(var(--control-offset) * -3));
 }
 
 .item-card__status {
@@ -149,6 +228,7 @@ const artSrc = computed(() => {
 .item-card__type-line--common {
   color: var(--ds-ink-muted);
 }
+
 .item-card__type-line--uncommon {
   color: var(--ds-tint-uncommon);
 }

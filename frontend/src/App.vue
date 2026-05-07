@@ -9,14 +9,11 @@ import { useGeneralStore } from './store/general'
 import type { Layout } from './store/general'
 import Confirmation from './components/utils/popups/Confirmation.vue'
 import { EventsOn } from '../wailsjs/runtime/runtime';
-import { useItemCardStore } from './store/itemCard';
-import { useConfirmationStore } from './store/confirmationStore';
-import { printCard } from './utils/printCard';
+import { useCardActions } from './composables/useCardActions';
 
 
 const generalStore = useGeneralStore()
-const itemCardStore = useItemCardStore()
-const confirmationStore = useConfirmationStore()
+const { exportCard, newCard, saveCard } = useCardActions()
 
 const layouts = {
   main: MainLayout,
@@ -37,41 +34,10 @@ onMounted(() => {
   selectedLayoutComponent.value = MainLayout
 
   EventsOn('menu:action', async (event) => {
-  if (event === 'print-card') {
-    try {
-    const filename = await printCard('.item-card__card', `${itemCardStore.name}-${itemCardStore.typeLine}-${itemCardStore.rarity}`)
-    generalStore.setToast({ title: 'Card exported', message: filename ?? 'asdf', type: 'success' })
-  } catch (e) {
-    generalStore.setToast({ title: 'Export failed', message: String(e), type: 'error' })
-  }
-  }
-  if (event === 'new-card') {
-    const execute = () => {
-      itemCardStore.newCard();
-      generalStore.setSelectedLayout('main')
-    }
-
-    if (!itemCardStore.isSaved) {
-      confirmationStore.setConfirmation({
-        title: 'Unsaved changes',
-        message: 'You have unsaved changes. Are you sure you want to create a new card?',
-        onConfirm: () => {
-          execute()
-        },
-        onCancel: () => { },
-        type: 'warning',
-        show: true,
-        confirmText: 'Create new card',
-        cancelText: 'Cancel',
-      });
-    } else {
-      execute()
-    }
-  }
-  if (event === 'save-card') {
-    void itemCardStore.saveCard();
-  }
-});
+    if (event === 'print-card') await exportCard()
+    if (event === 'new-card') newCard()
+    if (event === 'save-card') await saveCard()
+  });
 })
 
 </script>

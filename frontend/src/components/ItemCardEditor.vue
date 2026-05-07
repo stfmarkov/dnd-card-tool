@@ -22,7 +22,7 @@ const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) =>
     <div class="editor">
         <form class="editor__form" @submit.prevent>
             <EditorSection title="Name &amp; type">
-                <Field label="Item name" placeholder="E.g. Flame tongue" v-model="name" />
+                <Field horizontal label="Item name" placeholder="E.g. Flame tongue" v-model="name" />
                 <ComboBox label="Item type" :options="typeOptions" v-model="typeLine" />
                 <ComboBox label="Rarity" :options="rarityOptions" v-model="rarity" />
             </EditorSection>
@@ -32,11 +32,11 @@ const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) =>
             </EditorSection>
 
             <EditorSection title="Description">
-                <DescriptionEditor label="Text" v-model="description" />
+                <DescriptionEditor v-model="description" />
             </EditorSection>
 
             <EditorSection title="Footer">
-                <Field label="Footer line" placeholder="E.g. D&amp;D 5e — home game" v-model="footerText" />
+                <Field placeholder="E.g. D&amp;D 5e — home game" v-model="footerText" />
             </EditorSection>
         </form>
     </div>

@@ -4,6 +4,7 @@ import { ref, watch, computed } from 'vue';
 const props = defineProps<{
     type?: 'text' | 'textarea';
     label?: string;
+    horizontal?: boolean;
     placeholder?: string;
     modelValue: string;
 }>();
@@ -32,7 +33,7 @@ const id = computed(() =>
 </script>
 
 <template>
-    <div class="field">
+    <div class="field" :class="{ 'field--horizontal': horizontal }">
         <label v-if="label" :for="id" class="field__label">{{ label }}</label>
         <input v-if="!type || type === 'text'" :id="id" v-model="value" type="text" class="field__input"
             :placeholder="placeholder" autocomplete="off" />
@@ -46,6 +47,20 @@ const id = computed(() =>
     display: flex;
     flex-direction: column;
     gap: var(--ds-space-1);
+}
+
+.field--horizontal {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--ds-space-2);
+}
+
+.field--horizontal .field__input {
+    flex: 1;
+}
+
+.field--horizontal .field__textarea {
+    flex: 1;
 }
 
 .field__label {
