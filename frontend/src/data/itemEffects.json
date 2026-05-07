@@ -1,0 +1,218 @@
+[
+  {
+    "id": "attunement-standard",
+    "category": "Attunement",
+    "name": "Requires Attunement",
+    "snippet": "<p><strong>Attunement.</strong> Requires attunement. To attune to this item, spend a Short Rest in physical contact with it, focusing on it exclusively. You can be attuned to no more than three magic items at a time.</p>"
+  },
+  {
+    "id": "attunement-spellcaster",
+    "category": "Attunement",
+    "name": "Requires Attunement (Spellcaster)",
+    "snippet": "<p><strong>Attunement.</strong> Requires attunement by a spellcaster (a creature with at least one spell slot).</p>"
+  },
+  {
+    "id": "attunement-class",
+    "category": "Attunement",
+    "name": "Requires Attunement (Specific Class)",
+    "snippet": "<p><strong>Attunement.</strong> Requires attunement by a [class].</p>"
+  },
+  {
+    "id": "weapon-plus-1",
+    "category": "Attack & Damage",
+    "name": "+1 to Attack and Damage",
+    "snippet": "<p><strong>Magic Weapon.</strong> You have a +1 bonus to attack and damage rolls made with this magic weapon.</p>"
+  },
+  {
+    "id": "weapon-plus-2",
+    "category": "Attack & Damage",
+    "name": "+2 to Attack and Damage",
+    "snippet": "<p><strong>Magic Weapon.</strong> You have a +2 bonus to attack and damage rolls made with this magic weapon.</p>"
+  },
+  {
+    "id": "weapon-plus-3",
+    "category": "Attack & Damage",
+    "name": "+3 to Attack and Damage",
+    "snippet": "<p><strong>Magic Weapon.</strong> You have a +3 bonus to attack and damage rolls made with this magic weapon.</p>"
+  },
+  {
+    "id": "weapon-slayer",
+    "category": "Attack & Damage",
+    "name": "Slayer (extra 3d6 vs. creature type)",
+    "snippet": "<p><strong>Slayer.</strong> When you hit a [creature type] with this weapon, the target takes an extra 3d6 damage of the weapon's type.</p>"
+  },
+  {
+    "id": "weapon-vicious",
+    "category": "Attack & Damage",
+    "name": "Vicious (extra 2d6 on critical hit)",
+    "snippet": "<p><strong>Vicious.</strong> When you roll a 20 on your attack roll with this magic weapon, your critical hit deals an extra 2d6 damage of the weapon's type.</p>"
+  },
+  {
+    "id": "ac-plus-1",
+    "category": "Armor Class",
+    "name": "+1 Bonus to AC",
+    "snippet": "<p><strong>Magic Armor.</strong> You have a +1 bonus to AC while wearing this armor.</p>"
+  },
+  {
+    "id": "ac-plus-2",
+    "category": "Armor Class",
+    "name": "+2 Bonus to AC",
+    "snippet": "<p><strong>Magic Armor.</strong> You have a +2 bonus to AC while wearing this armor.</p>"
+  },
+  {
+    "id": "ac-plus-3",
+    "category": "Armor Class",
+    "name": "+3 Bonus to AC",
+    "snippet": "<p><strong>Magic Armor.</strong> You have a +3 bonus to AC while wearing this armor.</p>"
+  },
+  {
+    "id": "elemental-flame-tongue",
+    "category": "Elemental Damage",
+    "name": "Flame Tongue (2d6 fire, bonus action)",
+    "snippet": "<p><strong>Flame Tongue.</strong> You can use a Bonus Action to speak this magic sword's command word, causing flames to erupt from the blade. While ablaze, the sword deals an extra 2d6 fire damage to any target it hits, and sheds bright light in a 40-foot radius and dim light for an additional 40 feet. The flames last until you use a Bonus Action to speak the command word again or until you drop or sheathe the sword.</p>"
+  },
+  {
+    "id": "elemental-frost-brand",
+    "category": "Elemental Damage",
+    "name": "Frost Brand (1d6 cold, resistance to fire)",
+    "snippet": "<p><strong>Frost Brand.</strong> When you hit with an attack using this magic sword, the target takes an extra 1d6 cold damage. In addition, while you hold the sword, you have resistance to fire damage.</p><p>When you draw this weapon, you can extinguish all nonmagical flames within 30 feet of you. This property can be used no more than once per hour.</p>"
+  },
+  {
+    "id": "elemental-lightning",
+    "category": "Elemental Damage",
+    "name": "Lightning (1d6 lightning on hit)",
+    "snippet": "<p><strong>Shock.</strong> When you hit with an attack using this magic weapon, the target takes an extra 1d6 lightning damage.</p>"
+  },
+  {
+    "id": "elemental-radiant",
+    "category": "Elemental Damage",
+    "name": "Radiant (1d6 radiant on hit)",
+    "snippet": "<p><strong>Radiant.</strong> When you hit with an attack using this magic weapon, the target takes an extra 1d6 radiant damage.</p>"
+  },
+  {
+    "id": "elemental-poison",
+    "category": "Elemental Damage",
+    "name": "Venom (1d6 poison on hit)",
+    "snippet": "<p><strong>Venom.</strong> When you hit with an attack using this magic weapon, the target takes an extra 1d6 poison damage.</p>"
+  },
+  {
+    "id": "charges-3",
+    "category": "Charges",
+    "name": "3 Charges (regain 1d3 at dawn)",
+    "snippet": "<p><strong>Charges.</strong> This item has 3 charges. [Describe what spending a charge does.] The item regains 1d3 expended charges daily at dawn.</p>"
+  },
+  {
+    "id": "charges-5",
+    "category": "Charges",
+    "name": "5 Charges (regain 1d4+1 at dawn)",
+    "snippet": "<p><strong>Charges.</strong> This item has 5 charges. [Describe what spending a charge does.] The item regains 1d4+1 expended charges daily at dawn.</p>"
+  },
+  {
+    "id": "charges-7",
+    "category": "Charges",
+    "name": "7 Charges (regain 1d6+1 at dawn)",
+    "snippet": "<p><strong>Charges.</strong> This item has 7 charges. [Describe what spending a charge does.] The item regains 1d6+1 expended charges daily at dawn.</p>"
+  },
+  {
+    "id": "condition-wounding",
+    "category": "On-Hit Conditions",
+    "name": "Wounding (1d4 necrotic per turn)",
+    "snippet": "<p><strong>Wounding.</strong> Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means. Once per turn, when you hit a creature with this weapon, you can wound the target. At the start of each of the wounded creature's turns, it takes 1d4 necrotic damage for each time you've wounded it, and it can make a DC 15 Constitution saving throw, ending the effect of all such wounds on a success.</p>"
+  },
+  {
+    "id": "condition-poisoned",
+    "category": "On-Hit Conditions",
+    "name": "Poisoned (DC 15 Con save on hit)",
+    "snippet": "<p><strong>Venomous.</strong> When you hit a creature with this weapon, the target must succeed on a DC 15 Constitution saving throw or become poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on a success.</p>"
+  },
+  {
+    "id": "condition-frightened",
+    "category": "On-Hit Conditions",
+    "name": "Frightened (DC 15 Wis save on hit)",
+    "snippet": "<p><strong>Terror.</strong> When you hit a creature with this weapon, the target must succeed on a DC 15 Wisdom saving throw or become frightened of you for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on a success.</p>"
+  },
+  {
+    "id": "special-dancing",
+    "category": "Special Weapon Properties",
+    "name": "Dancing (hover and attack independently)",
+    "snippet": "<p><strong>Dancing.</strong> You can use a Bonus Action to toss this magic sword into the air and speak the command word. The sword begins to hover, flies up to 30 feet, and attacks one creature of your choice within 5 feet of it, using your attack roll and ability score modifier to damage rolls. After its fourth attack, it flies up to 30 feet and tries to return to your hand.</p>"
+  },
+  {
+    "id": "special-returning",
+    "category": "Special Weapon Properties",
+    "name": "Returning (returns to hand after thrown)",
+    "snippet": "<p><strong>Returning.</strong> This weapon has the thrown property. Immediately after you make a ranged attack with this weapon, it flies back to your hand.</p>"
+  },
+  {
+    "id": "special-defending",
+    "category": "Special Weapon Properties",
+    "name": "Defending (transfer bonus to AC)",
+    "snippet": "<p><strong>Defending.</strong> The first time you attack with this weapon on each of your turns, you can transfer some or all of its attack and damage bonus to your Armor Class instead. The adjusted bonuses remain in effect until the start of your next turn.</p>"
+  },
+  {
+    "id": "special-warning",
+    "category": "Special Weapon Properties",
+    "name": "Warning (can't be surprised)",
+    "snippet": "<p><strong>Warning.</strong> While attuned to this weapon, you have advantage on initiative rolls. In addition, you and any of your companions within 30 feet of you can't be surprised, except when incapacitated by something other than nonmagical sleep. The weapon magically awakens you and your companions within range if any of you are sleeping naturally when combat begins.</p>"
+  },
+  {
+    "id": "resistance-damage-type",
+    "category": "Resistances & Saves",
+    "name": "Resistance to Damage Type",
+    "snippet": "<p><strong>Resistance.</strong> While wearing/wielding this item, you have resistance to [damage type] damage.</p>"
+  },
+  {
+    "id": "saves-plus-1",
+    "category": "Resistances & Saves",
+    "name": "+1 to All Saving Throws",
+    "snippet": "<p><strong>Protection.</strong> While this item is on your person, you gain a +1 bonus to all saving throws.</p>"
+  },
+  {
+    "id": "saves-vs-spells",
+    "category": "Resistances & Saves",
+    "name": "Advantage on Saving Throws vs. Spells",
+    "snippet": "<p><strong>Spell Guard.</strong> While holding this item, you have advantage on saving throws against spells and other magical effects, and spell attacks have disadvantage against you.</p>"
+  },
+  {
+    "id": "saves-vs-poison",
+    "category": "Resistances & Saves",
+    "name": "Advantage on Saving Throws vs. Poison",
+    "snippet": "<p><strong>Poison Resistance.</strong> While wearing this item, you have advantage on saving throws against poison, and you have resistance to poison damage.</p>"
+  },
+  {
+    "id": "crit-life-stealing",
+    "category": "On-Critical Properties",
+    "name": "Life Stealing (3d6 necrotic on nat 20)",
+    "snippet": "<p><strong>Life Stealing.</strong> When you attack a creature with this magic weapon and roll a 20 on the attack roll, that target takes an extra 3d6 necrotic damage, provided that the target isn't a construct or an undead. You gain temporary hit points equal to the extra damage dealt.</p>"
+  },
+  {
+    "id": "crit-vorpal",
+    "category": "On-Critical Properties",
+    "name": "Vorpal (sever head on nat 20)",
+    "snippet": "<p><strong>Vorpal.</strong> This weapon ignores resistance to slashing damage. When you attack a creature that has at least one head and roll a 20 on the attack roll, you cut off one of the creature's heads. The creature dies if it can't survive without the lost head. A creature is immune to this effect if it is immune to slashing damage, doesn't have or need a head, has legendary actions, or the GM decides it is too large. Such a creature instead takes an extra 6d8 slashing damage from the hit.</p>"
+  },
+  {
+    "id": "curse-standard",
+    "category": "Curses",
+    "name": "Cursed",
+    "snippet": "<p><strong>Curse.</strong> This item is cursed. Attuning to it extends the curse to you until you are targeted by the <em>remove curse</em> spell or similar magic. Removing the item fails to end the curse on you. [Describe the curse effect.]</p>"
+  },
+  {
+    "id": "curse-berserker",
+    "category": "Curses",
+    "name": "Berserker Curse",
+    "snippet": "<p><strong>Curse.</strong> This item is cursed, and becoming attuned to it extends the curse to you. As long as you remain cursed, you are unwilling to part with the item, keeping it within reach at all times. You also have disadvantage on attack rolls with weapons other than this one, unless no foe is within 60 feet of you that you can see or hear.</p><p>Whenever a hostile creature damages you while the item is in your possession, you must succeed on a DC 15 Wisdom saving throw or go berserk. While berserk, you must use your action each round to attack the nearest creature.</p>"
+  },
+  {
+    "id": "misc-sentient",
+    "category": "Misc",
+    "name": "Sentient Weapon",
+    "snippet": "<p><strong>Sentience.</strong> This weapon is sentient and has [alignment] alignment. It has an Intelligence of [score], a Wisdom of [score], and a Charisma of [score]. It communicates telepathically with its wielder and can understand [language]. The weapon has a purpose and personality — if you act against its interests, it may attempt to seize control.</p>"
+  },
+  {
+    "id": "misc-wish",
+    "category": "Misc",
+    "name": "Wish (1 charge)",
+    "snippet": "<p><strong>Wish.</strong> This item has 1 charge. While holding it, you can use an action to expend the charge and cast the <em>wish</em> spell from it. This property can't be used again until the next dawn. The item loses this property if it has no charges remaining.</p>"
+  }
+]

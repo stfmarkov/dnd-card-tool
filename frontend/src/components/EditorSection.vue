@@ -14,7 +14,10 @@ const id = computed(() => {
 
 <template>
     <section class="editor__section" :aria-labelledby="`label-${id}`">
-        <h2 :id="`label-${id}`" class="editor__section-title">{{ title }}</h2>
+        <div class="editor__section-header">
+            <h2 :id="`label-${id}`" class="editor__section-title">{{ title }}</h2>
+            <slot name="header-actions" />
+        </div>
         <p v-if="hint" class="editor__section-hint">{{ hint }}</p>
 
         <slot />
@@ -32,6 +35,17 @@ const id = computed(() => {
     display: flex;
     flex-direction: column;
     gap: var(--ds-space-3);
+}
+
+.editor__section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editor__section-header-actions {
+    display: flex;
+    gap: var(--ds-space-2);
 }
 
 .editor__section-title {

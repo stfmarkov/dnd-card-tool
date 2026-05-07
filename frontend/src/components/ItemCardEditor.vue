@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import Field from './utils/Field.vue';
 import ComboBox from './utils/selects/ComboBox.vue';
 import EditorSection from './EditorSection.vue';
 import EditorUploader from './EditorUploader.vue';
 import DescriptionEditor from './DescriptionEditor.vue';
+import EffectPickerPopup from './utils/popups/EffectPickerPopup.vue';
 import { useItemCardStore } from '../store/itemCard';
 import { rarityOptions, typeOptions } from '../utils/cardOptions';
 
@@ -16,6 +17,12 @@ const rarity = computed({ get: () => itemCardStore.rarity, set: (v: string) => i
 const description = computed({ get: () => itemCardStore.description, set: (v: string) => itemCardStore.setDescription(v) });
 const footerText = computed({ get: () => itemCardStore.footerText, set: (v: string) => itemCardStore.setFooterText(v) });
 const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) => itemCardStore.setArtwork(v) });
+
+const isPickerOpen = ref(false)
+
+const insertEffect = (snippet: string) => {
+    description.value = description.value + snippet
+}
 </script>
 
 <template>
@@ -32,6 +39,11 @@ const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) =>
             </EditorSection>
 
             <EditorSection title="Description">
+                <template #header-actions>
+                    <button type="button" class="editor__effect-btn" @click="isPickerOpen = true">
+                        + Add effect
+                    </button>
+                </template>
                 <DescriptionEditor v-model="description" />
             </EditorSection>
 
@@ -40,6 +52,12 @@ const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) =>
             </EditorSection>
         </form>
     </div>
+
+    <EffectPickerPopup
+        :show="isPickerOpen"
+        @select="insertEffect"
+        @close="isPickerOpen = false"
+    />
 </template>
 
 <style scoped>
@@ -96,5 +114,29 @@ const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) =>
     gap: var(--ds-space-4);
     max-width: 32rem;
     width: 100%;
+}
+
+.editor__effect-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-family: var(--ds-font-ui);
+    font-size: var(--ds-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ds-gold-mid);
+    cursor: pointer;
+    transition: color 0.15s ease;
+    line-height: 1;
+}
+
+.editor__effect-btn:hover {
+    color: var(--ds-gold-bright);
+}
+
+.editor__effect-btn:focus-visible {
+    outline: 2px solid var(--ds-gold-mid);
+    outline-offset: 2px;
+    border-radius: 2px;
 }
 </style>
