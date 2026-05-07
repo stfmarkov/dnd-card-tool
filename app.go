@@ -40,6 +40,7 @@ type CardData struct {
 	FooterText  string `json:"footerText"`
 	Rarity      string `json:"rarity"`
 	Artwork     string `json:"artwork"`
+	Template    string `json:"template"`
 }
 
 // SaveCardDataRequest is the payload for SaveCardData. When ImageBytes is non-empty, a hashed file is written under item-cards/art and the resulting basename is stored; otherwise Artwork is stored as-is.
@@ -52,6 +53,7 @@ type SaveCardDataRequest struct {
 	Artwork     string `json:"artwork"`
 	ImageBytes  []byte `json:"imageBytes"`
 	ImageExt    string `json:"imageExt"`
+	Template    string `json:"template"`
 }
 
 // SaveCardPNG opens the OS save dialog and writes PNG bytes to the chosen path.
@@ -83,6 +85,7 @@ type UpdateCardDataRequest struct {
 	Artwork     string `json:"artwork"`
 	ImageBytes  []byte `json:"imageBytes"`
 	ImageExt    string `json:"imageExt"`
+	Template    string `json:"template"`
 }
 
 // SaveCardData appends a new card and returns the assigned ID.

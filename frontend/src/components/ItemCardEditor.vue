@@ -2,18 +2,21 @@
 import { computed, ref } from 'vue'
 import Field from './utils/Field.vue';
 import ComboBox from './utils/selects/ComboBox.vue';
+import Select from './utils/selects/Select.vue';
 import EditorSection from './EditorSection.vue';
 import EditorUploader from './EditorUploader.vue';
 import DescriptionEditor from './DescriptionEditor.vue';
 import EffectPickerPopup from './utils/popups/EffectPickerPopup.vue';
 import { useItemCardStore } from '../store/itemCard';
-import { rarityOptions, typeOptions } from '../utils/cardOptions';
+import type { CardTemplate } from '../store/itemCard';
+import { rarityOptions, templateOptions, typeOptions } from '../utils/cardOptions';
 
 const itemCardStore = useItemCardStore();
 
 const name = computed({ get: () => itemCardStore.name, set: (v: string) => itemCardStore.setName(v) });
 const typeLine = computed({ get: () => itemCardStore.typeLine, set: (v: string) => itemCardStore.setTypeLine(v) });
 const rarity = computed({ get: () => itemCardStore.rarity, set: (v: string) => itemCardStore.setRarity(v) });
+const template = computed({ get: () => itemCardStore.template, set: (v: string) => itemCardStore.setTemplate(v as CardTemplate) });
 const description = computed({ get: () => itemCardStore.description, set: (v: string) => itemCardStore.setDescription(v) });
 const footerText = computed({ get: () => itemCardStore.footerText, set: (v: string) => itemCardStore.setFooterText(v) });
 const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) => itemCardStore.setArtwork(v) });
@@ -28,6 +31,10 @@ const insertEffect = (snippet: string) => {
 <template>
     <div class="editor">
         <form class="editor__form" @submit.prevent>
+            <EditorSection title="Card template">
+                <Select label="Template" :options="templateOptions" v-model="template" />
+            </EditorSection>
+
             <EditorSection title="Name &amp; type">
                 <Field horizontal label="Item name" placeholder="E.g. Flame tongue" v-model="name" />
                 <ComboBox label="Item type" :options="typeOptions" v-model="typeLine" />

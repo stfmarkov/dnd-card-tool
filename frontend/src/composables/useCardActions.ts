@@ -3,7 +3,7 @@ import { useItemCardStore } from '../store/itemCard';
 import { useGeneralStore } from '../store/general';
 import { useConfirmationStore } from '../store/confirmationStore';
 
-export function useCardActions() {
+export const useCardActions = () => {
     const itemCardStore = useItemCardStore();
     const generalStore = useGeneralStore();
     const confirmationStore = useConfirmationStore();

@@ -1,5 +1,11 @@
 import type { SelectOption } from '../components/utils/selects/types/propTypes'
 
+export const templateOptions: SelectOption[] = [
+    { label: 'Standard', value: 'standart' },
+    { label: 'Minimalist', value: 'minimalist' },
+    { label: 'Scroll', value: 'scroll' },
+]
+
 export const rarityOptions: SelectOption[] = [
     { label: 'Common', value: 'common' },
     { label: 'Uncommon', value: 'uncommon' },

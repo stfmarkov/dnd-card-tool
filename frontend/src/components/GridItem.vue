@@ -51,7 +51,10 @@ const handleItemClick = (value: string) => {
             <h2 class="grid-card__name">{{ item.name || 'Untitled' }}</h2>
             <DropdownMenu horizontal="left" :items="items" @selected="handleItemClick"/>
         </div>
-        <p class="grid-card__type">{{ item.typeLine }}</p>
+        <p class="grid-card__type">
+            {{ item.typeLine }}
+            <span v-if="item.template && item.template !== 'standart'" class="grid-card__template">· {{ item.template }}</span>
+        </p>
     </article>
 </template>
 
@@ -118,6 +121,10 @@ const handleItemClick = (value: string) => {
     color: var(--ds-workspace-muted);
     text-transform: capitalize;
     line-height: 1.35;
+}
+
+.grid-card__template {
+    opacity: 0.55;
 }
 
 /* Subtle left accent by rarity */

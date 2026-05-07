@@ -7,6 +7,8 @@ const extFromFilename = (name: string): string => {
   return dot >= 0 ? name.slice(dot).toLowerCase() : '.png'
 }
 
+export type CardTemplate = 'standart' | 'minimalist' | 'scroll'
+
 export interface ItemCard {
   /** Set when row comes from GetCardData (for list keys) */
   id: string;
@@ -17,6 +19,7 @@ export interface ItemCard {
   artwork: string;
   artworkSourceFile: File | null;
   rarity: string;
+  template: CardTemplate;
 }
 
 interface ItemCardState extends ItemCard {
@@ -34,6 +37,7 @@ export const useItemCardStore = defineStore('itemCard', {
     /** Last picked image file for save (hash + dedup on disk); cleared when artwork is cleared. */
     artworkSourceFile: null as File | null,
     rarity: '',
+    template: 'standart',
 
     isSaved: true,
   }),
@@ -73,6 +77,10 @@ export const useItemCardStore = defineStore('itemCard', {
       this.rarity = rarity
       this.setIsSaved(false)
     },
+    setTemplate(template: CardTemplate) {
+      this.template = template
+      this.setIsSaved(false)
+    },
     setIsSaved(isSaved: boolean) {
       this.isSaved = isSaved
     },
@@ -85,6 +93,7 @@ export const useItemCardStore = defineStore('itemCard', {
       this.footerText = item.footerText
       this.artwork = item.artwork
       this.artworkSourceFile = null
+      this.template = (item.template as CardTemplate) || 'standart'
       this.setIsSaved(true)
     },
     /** Clear all card fields; used from the OS / File / New card menu. */
@@ -95,6 +104,7 @@ export const useItemCardStore = defineStore('itemCard', {
       this.rarity = 'common'
       this.description = '<p>This is a <b>cool</b> description of the item. Flavor text can run a few lines and stay readable on print.</p>'
       this.footerText = 'D&amp;D 5e — item card (preview)'
+      this.template = 'standart'
       this.setArtwork('')
       this.setIsSaved(false)
     },
@@ -116,6 +126,7 @@ export const useItemCardStore = defineStore('itemCard', {
       const snapRarity = this.rarity
       const snapSourceFile = this.artworkSourceFile
       const snapArtwork = this.artwork
+      const snapTemplate = this.template
 
       try {
         let imageBytes: number[] = []
@@ -136,6 +147,7 @@ export const useItemCardStore = defineStore('itemCard', {
           description: snapDescription,
           footerText: snapFooterText,
           rarity: snapRarity,
+          template: snapTemplate,
           artwork: '',
           imageBytes,
           imageExt,

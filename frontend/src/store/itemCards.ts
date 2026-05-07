@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ItemCard } from './itemCard'
+import type { CardTemplate } from './itemCard'
 import { DeleteCardData, DuplicateCardData, GetCardData } from '../../wailsjs/go/main/App'
 import { useItemCardStore } from './itemCard'
 import { useGeneralStore } from './general'
@@ -32,6 +33,7 @@ export const useItemCardsStore = defineStore('itemCards', {
                 artwork: item.artwork,
                 artworkSourceFile: null,
                 rarity: item.rarity,
+                template: (item.template as CardTemplate) || 'standart',
             }))
         },
 

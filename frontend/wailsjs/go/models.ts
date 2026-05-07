@@ -8,6 +8,7 @@ export namespace main {
 	    footerText: string;
 	    rarity: string;
 	    artwork: string;
+	    template: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new CardData(source);
@@ -22,6 +23,7 @@ export namespace main {
 	        this.footerText = source["footerText"];
 	        this.rarity = source["rarity"];
 	        this.artwork = source["artwork"];
+	        this.template = source["template"];
 	    }
 	}
 	export class Filter {
@@ -49,6 +51,7 @@ export namespace main {
 	    artwork: string;
 	    imageBytes: number[];
 	    imageExt: string;
+	    template: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new SaveCardDataRequest(source);
@@ -64,6 +67,7 @@ export namespace main {
 	        this.artwork = source["artwork"];
 	        this.imageBytes = source["imageBytes"];
 	        this.imageExt = source["imageExt"];
+	        this.template = source["template"];
 	    }
 	}
 	export class UpdateCardDataRequest {
@@ -75,6 +79,7 @@ export namespace main {
 	    artwork: string;
 	    imageBytes: number[];
 	    imageExt: string;
+	    template: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new UpdateCardDataRequest(source);
@@ -90,6 +95,7 @@ export namespace main {
 	        this.artwork = source["artwork"];
 	        this.imageBytes = source["imageBytes"];
 	        this.imageExt = source["imageExt"];
+	        this.template = source["template"];
 	    }
 	}
 

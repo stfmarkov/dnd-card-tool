@@ -43,20 +43,18 @@ Embed the [D&D 5e SRD](https://dnd.wizards.com/resources/systems-reference-docum
 
 This is also the foundation for the Item Effects feature below.
 
-### 6. Item effects library
-Instead of typing every property from scratch, the user can open an "Add effect" picker inside the description editor. Selecting an effect (e.g. *+1 to attack and damage rolls*, *Flaming (1d6 fire)*, *Charges: 3, regain 1d3 at dawn*) appends a pre-formatted block of text **into the description field** where it can be freely edited like any other text. Effects are just data — a curated JSON list of name + snippet pairs. They are not stored separately; once inserted they become plain description content.
+### ~~6. Item effects library~~ ✓
+A curated `itemEffects.json` dataset of 36 name + HTML snippet pairs across 11 categories (Attunement, Attack & Damage, Armor Class, Elemental Damage, Charges, On-Hit Conditions, Special Weapon Properties, Resistances & Saves, On-Critical Properties, Curses, Misc). An "Add effect" button in the Description section header opens a searchable, category-filterable popup; selecting an effect appends its pre-formatted HTML block into the description field where it can be freely edited like any other text. Effects are not stored separately — once inserted they become plain description content.
 
-Requires the rich text editor (Beta item 1) to be in place first.
+### ~~7. Card templates (visual designs)~~ ✓
+A "template" means a completely different card layout and visual design — not a content preset. Each template is a distinct Vue component receiving the same `ItemCard` props.
 
-### 7. Card templates (visual designs)
-A "template" means a completely different card layout and visual design — not a content preset. The first template is the **standard single-sided card** (current design). Additional templates are full redesigns of the preview chrome, each a distinct Vue component receiving the same `ItemCard` props.
+Shipped template set:
+- **Standard** — original design; burgundy header bar, gold art frame, ruled footer
+- **Minimalist** — clean text-focused layout; no coloured header, no ornamental border; art renders full-width without a frame
+- **Scroll** — parchment scroll aesthetic; warm aged-paper background, dark wood scroll caps with floral ornaments, gold dividers
 
-Proposed initial template set:
-- **Standard** — current design
-- **Minimalist** — text-only, no ornamental border
-- **Scroll** — parchment scroll aesthetic with illustrated top/bottom borders
-
-The selected template is stored per-card and serialised to `cards.json` as a `template` field.
+The selected template is stored per-card and serialised to `cards.json` as a `template` field. A "Card template" dropdown sits at the top of the editor and updates the preview in real time. The grid shows the template name next to the type line for non-standard cards.
 
 ### 8. Two-sided card template *(client request)*
 A special template variant where the card has two faces:
@@ -102,5 +100,5 @@ Reorder cards in the grid by dragging. Order is persisted to `cards.json` via an
 |---|---|---|
 | **Pre-beta** | ✅ Shipped | Delete, unsaved-changes guard, new/editing indicator, empty grid state |
 | **Beta** | ✅ Shipped | Rich text description, search/filter, duplicate, rarity on preview |
-| **v1.0** | Planned | SRD browser, item effects, card templates (incl. two-sided), JSON import/export |
+| **v1.0** | Planned | SRD browser, card templates ✓, two-sided template, JSON import/export |
 | **v1.1** | Planned | Print sheet, tags, drag-to-reorder |

@@ -70,6 +70,7 @@ func addCard(card SaveCardDataRequest) (string, error) {
 		ID:          uuid.New().String(),
 		Name:        card.Name,
 		TypeLine:    card.TypeLine,
+		Template:    card.Template,
 		Description: card.Description,
 		FooterText:  card.FooterText,
 		Rarity:      card.Rarity,
@@ -139,6 +140,7 @@ func updateCardById(id string, req UpdateCardDataRequest) error {
 				FooterText:  req.FooterText,
 				Rarity:      req.Rarity,
 				Artwork:     artwork,
+				Template:    req.Template,
 			}
 			return saveCardsToJson(cards)
 		}
