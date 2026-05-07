@@ -85,6 +85,17 @@ Reorder cards in the grid by dragging. Order is persisted to `cards.json` via an
 
 ---
 
+## Platform support
+
+| Platform | Status | Notes |
+|---|---|---|
+| **Windows** | ✅ Supported | Primary target |
+| **Linux** | Planned | After v1.0 feature set is stable; Wails supports it with minimal changes |
+| **macOS** | Not planned | No current demand |
+| **Web** | Not planned | Only if a sustainable funding model exists (hosting + storage costs make a free web version unviable) |
+
+---
+
 ## Release summary
 
 | Milestone | Status | What ships |

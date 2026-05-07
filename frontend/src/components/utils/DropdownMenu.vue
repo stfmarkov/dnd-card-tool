@@ -64,7 +64,7 @@ const closeMenu = () => {
 
 .button-icon {
     position: relative;
-    z-index: 1001;
+    z-index: 999;
 }
 
 .dropdown-menu--position-top .dropdown-menu__content {
@@ -92,7 +92,7 @@ const closeMenu = () => {
     top: calc(100% - 1rem);
     left: 0;
     min-width: 100px;
-    z-index: 1000;
+    z-index: 998;
     list-style: none;
     margin: 0;
     display: flex;
