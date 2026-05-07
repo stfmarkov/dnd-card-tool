@@ -1,4 +1,4 @@
-import type { SelectOption } from '../components/utils/Select.vue'
+import type { SelectOption } from '../components/utils/selects/types/propTypes'
 
 export const rarityOptions: SelectOption[] = [
     { label: 'Common', value: 'common' },

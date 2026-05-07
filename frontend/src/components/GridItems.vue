@@ -8,7 +8,7 @@ import { useItemCardStore } from '../store/itemCard';
 import { useConfirmationStore } from '../store/confirmationStore';
 import ButtonMain from './utils/buttons/ButtonMain.vue';
 import Field from './utils/Field.vue';
-import Select from './utils/Select.vue';
+import Select from './utils/selects/Select.vue';
 import { rarityOptions as baseRarityOptions, typeOptions as baseTypeOptions } from '../utils/cardOptions';
 
 const generalStore = useGeneralStore()
@@ -104,8 +104,8 @@ const createNewCard = () => {
 
         <div class="grid-page__toolbar">
             <Field class="grid-page__search-field" v-model="search" placeholder="Search cards…" />
-            <Select v-model="selectedType" :options="typeOptions" />
-            <Select v-model="selectedRarity" :options="rarityOptions" />
+            <Select v-model="selectedType" :options="typeOptions" label="Item type" />
+            <Select v-model="selectedRarity" :options="rarityOptions" label="Rarity" />
         </div>
 
         <div v-if="items.length === 0 && !hasActiveFilters" class="grid-page__empty">

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import Field from './utils/Field.vue';
-import Select from './utils/Select.vue';
+import ComboBox from './utils/selects/ComboBox.vue';
 import EditorSection from './EditorSection.vue';
 import EditorUploader from './EditorUploader.vue';
 import DescriptionEditor from './DescriptionEditor.vue';
@@ -23,8 +23,8 @@ const artwork = computed({ get: () => itemCardStore.artwork, set: (v: string) =>
         <form class="editor__form" @submit.prevent>
             <EditorSection title="Name &amp; type">
                 <Field label="Item name" placeholder="E.g. Flame tongue" v-model="name" />
-                <Select label="Item type" :options="typeOptions" v-model="typeLine" />
-                <Select label="Rarity" :options="rarityOptions" v-model="rarity" />
+                <ComboBox label="Item type" :options="typeOptions" v-model="typeLine" />
+                <ComboBox label="Rarity" :options="rarityOptions" v-model="rarity" />
             </EditorSection>
 
             <EditorSection title="Artwork">

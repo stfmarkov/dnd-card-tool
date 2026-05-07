@@ -1,0 +1,1 @@
+export type SelectEmit = (e: 'update:modelValue', value: string) => void;
