@@ -1,11 +1,26 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
+import Tooltip from '../Tooltip.vue'
+
 const props = defineProps<{
     empty?: boolean
+    title?: string
 }>()
+
+const showTitle = ref(false)
+
+const toggleTitle = () => {
+    if (!props.title) {
+        return
+    }
+    showTitle.value = !showTitle.value
+}
+
 </script>
 <template>
-    <button class="button-icon" :class="{ 'button-icon--empty': empty }">
+    <button class="button-icon" :class="{ 'button-icon--empty': empty }" @mouseenter="toggleTitle" @mouseleave="toggleTitle">
         <slot />
+        <Tooltip v-if="title" :title="title" :show="showTitle" />
     </button>
 </template>
 <style scoped>

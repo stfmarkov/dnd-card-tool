@@ -10,8 +10,7 @@ export const useCardActions = () => {
 
     const exportCard = async () => {
         try {
-            const filename = await printCard('.item-card__card', `${itemCardStore.name}-${itemCardStore.typeLine}-${itemCardStore.rarity}`)
-            generalStore.setToast({ title: 'Card exported', message: filename ?? '', type: 'success' })
+            await printCard('.item-card__card', `${itemCardStore.name}-${itemCardStore.typeLine}-${itemCardStore.rarity}`)
         } catch (e) {
             generalStore.setToast({ title: 'Export failed', message: String(e), type: 'error' })
         }

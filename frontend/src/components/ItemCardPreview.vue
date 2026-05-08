@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 
 import { useItemCardStore } from '../store/itemCard';
 import Arrow from './Icons/arrow.vue';
+import IconVerticalDots from './Icons/verticalDots.vue';
 import ButtonIcon from './utils/buttons/ButtonIcon.vue';
 import IconExport from './Icons/export.vue';
 import IconNew from './Icons/new.vue';
@@ -20,7 +21,7 @@ const { exportCard, newCard, saveCard } = useCardActions();
 
 const cardId = computed(() => itemCardStore.id)
 
-const isVisible = ref(false)
+const isVisible = ref(true)
 
 const toggleVisibility = () => {
   isVisible.value = !isVisible.value
@@ -41,17 +42,20 @@ const cardComponent = computed<Component>(() => cardComponentMap[itemCardStore.t
   <div class="item-card__container">
     <div class="item-card__controls" :class="{ 'item-card__controls--visible': isVisible }">
       <ButtonIcon @click="toggleVisibility" class="item-card__control item-card__control-0">
-        <Arrow direction="left" />
+        <IconVerticalDots />
       </ButtonIcon>
 
-      <ButtonIcon @click="exportCard" class="item-card__control item-card__control-1">
+      <ButtonIcon @click="exportCard" title="Export card" class="item-card__control item-card__control-1">
         <IconExport />
       </ButtonIcon>
-      <ButtonIcon @click="newCard" class="item-card__control item-card__control-2">
+      <ButtonIcon @click="newCard" title="New card" class="item-card__control item-card__control-2">
         <IconNew />
       </ButtonIcon>
-      <ButtonIcon @click="saveCard" class="item-card__control item-card__control-3">
+      <ButtonIcon @click="saveCard" title="Save card" class="item-card__control item-card__control-3">
         <IconSave />
+      </ButtonIcon>
+      <ButtonIcon @click="toggleVisibility" class="item-card__control item-card__control-4">
+        <Arrow direction="right" />
       </ButtonIcon>
     </div>
     <p class="item-card__status" :class="cardId ? 'item-card__status--id' : 'item-card__status--new'">
@@ -113,8 +117,17 @@ const cardComponent = computed<Component>(() => cardComponentMap[itemCardStore.t
   z-index: -3;
 }
 
+.item-card__control-4 {
+  z-index: 1;
+}
+
 .item-card__controls--visible .item-card__control {
   opacity: 1;
+}
+
+.item-card__controls--visible .item-card__control-0 {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .item-card__controls--visible .item-card__control-1 {

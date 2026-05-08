@@ -50,7 +50,7 @@ watch(() => props.modelValue, (newVal) => {
 
 <template>
     <div class="combobox">
-        <label v-if="label" :for="id" class="combobox__label">{{ label }}</label>
+        <label v-if="label" :style="{ width: labelWidth }" :for="id" class="combobox__label">{{ label }}</label>
         <SelectList :label="label" :options="combinedOptions" v-model="dropdownValue" />
         <Field v-if="isCustom" :id="id" v-model="customValue" type="text" class="combobox__input" autocomplete="off" />
     </div>

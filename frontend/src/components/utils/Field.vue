@@ -4,6 +4,7 @@ import { ref, watch, computed } from 'vue';
 const props = defineProps<{
     type?: 'text' | 'textarea';
     label?: string;
+    labelWidth?: string;
     horizontal?: boolean;
     placeholder?: string;
     modelValue: string;
@@ -34,7 +35,7 @@ const id = computed(() =>
 
 <template>
     <div class="field" :class="{ 'field--horizontal': horizontal }">
-        <label v-if="label" :for="id" class="field__label">{{ label }}</label>
+        <label v-if="label" :style="{ width: labelWidth }" :for="id" class="field__label">{{ label }}</label>
         <input v-if="!type || type === 'text'" :id="id" v-model="value" type="text" class="field__input"
             :placeholder="placeholder" autocomplete="off" />
         <textarea v-else :id="id" v-model="value" class="field__textarea" :placeholder="placeholder"

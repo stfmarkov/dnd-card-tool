@@ -36,9 +36,9 @@ const insertEffect = (snippet: string) => {
             </EditorSection>
 
             <EditorSection title="Name &amp; type">
-                <Field horizontal label="Item name" placeholder="E.g. Flame tongue" v-model="name" />
-                <ComboBox label="Item type" :options="typeOptions" v-model="typeLine" />
-                <ComboBox label="Rarity" :options="rarityOptions" v-model="rarity" />
+                <Field horizontal label="Item name" labelWidth="70px" placeholder="E.g. Flame tongue" v-model="name" />
+                <ComboBox label="Item type" labelWidth="70px" :options="typeOptions" v-model="typeLine" />
+                <ComboBox label="Rarity" labelWidth="70px" :options="rarityOptions" v-model="rarity" />
             </EditorSection>
 
             <EditorSection title="Artwork">

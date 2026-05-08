@@ -5,6 +5,7 @@ export interface SelectOption {
 
 export type SelectProps = {
     label: string;
+    labelWidth?: string;
     modelValue: string;
     options: SelectOption[];
 }

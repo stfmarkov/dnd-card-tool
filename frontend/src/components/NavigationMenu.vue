@@ -24,13 +24,13 @@ const toMainView = () => {
 </script>
 <template>
     <div class="navigation-menu" :class="{ 'navigation-menu--open': isOpen }">
-        <ButtonIcon class="navigation-menu__main"  @click="toggleMenu">
+        <ButtonIcon class="navigation-menu__main" @click="toggleMenu">
             <IconsHamburger />
         </ButtonIcon>
-        <ButtonIcon class="navigation-menu__right-button" @click="toGridView">
+        <ButtonIcon class="navigation-menu__right-button" title="Grid view" @click="toGridView">
             <IconsGrid />
         </ButtonIcon>
-        <ButtonIcon class="navigation-menu__bottom-button" @click="toMainView">
+        <ButtonIcon class="navigation-menu__bottom-button" title="Split view" @click="toMainView">
             <IconsSplit direction="horizontal" />
         </ButtonIcon>
     </div>
