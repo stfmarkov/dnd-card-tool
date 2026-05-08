@@ -11,6 +11,7 @@ import { useCardActions } from '../composables/useCardActions';
 import CardStandart from './cards/Standart.vue';
 import CardMinimalist from './cards/Minimalist.vue';
 import CardScroll from './cards/Scroll.vue';
+import CardTwoSided from './cards/TwoSided.vue';
 import type { Component } from 'vue';
 import type { CardTemplate } from '../store/itemCard';
 
@@ -29,6 +30,7 @@ const cardComponentMap: Record<CardTemplate, Component> = {
   standart: CardStandart,
   minimalist: CardMinimalist,
   scroll: CardScroll,
+  twosided: CardTwoSided,
 }
 
 const cardComponent = computed<Component>(() => cardComponentMap[itemCardStore.template] ?? CardStandart)

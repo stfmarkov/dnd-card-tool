@@ -4,6 +4,7 @@ export const templateOptions: SelectOption[] = [
     { label: 'Standard', value: 'standart' },
     { label: 'Minimalist', value: 'minimalist' },
     { label: 'Scroll', value: 'scroll' },
+    { label: 'Two-sided', value: 'twosided' },
 ]
 
 export const rarityOptions: SelectOption[] = [

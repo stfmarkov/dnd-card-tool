@@ -7,7 +7,7 @@ const extFromFilename = (name: string): string => {
   return dot >= 0 ? name.slice(dot).toLowerCase() : '.png'
 }
 
-export type CardTemplate = 'standart' | 'minimalist' | 'scroll'
+export type CardTemplate = 'standart' | 'minimalist' | 'scroll' | 'twosided'
 
 export interface ItemCard {
   /** Set when row comes from GetCardData (for list keys) */

@@ -35,18 +35,10 @@ The type line on `ItemCardPreview` is tinted using the same `--ds-tint-*` tokens
 
 These are the features that make the tool genuinely useful for a full campaign.
 
-### 5. SRD item browser
-Embed the [D&D 5e SRD](https://dnd.wizards.com/resources/systems-reference-document) item list as a bundled JSON dataset. Add a "Browse SRD" panel in the grid or editor that lets the user:
-- Browse / search all official items
-- Load an item directly into the editor for export as-is
-- Load it as a starting point for a custom edit (auto-populates name, type line, description)
-
-This is also the foundation for the Item Effects feature below.
-
-### ~~6. Item effects library~~ ✓
+### ~~5. Item effects library~~ ✓
 A curated `itemEffects.json` dataset of 36 name + HTML snippet pairs across 11 categories (Attunement, Attack & Damage, Armor Class, Elemental Damage, Charges, On-Hit Conditions, Special Weapon Properties, Resistances & Saves, On-Critical Properties, Curses, Misc). An "Add effect" button in the Description section header opens a searchable, category-filterable popup; selecting an effect appends its pre-formatted HTML block into the description field where it can be freely edited like any other text. Effects are not stored separately — once inserted they become plain description content.
 
-### ~~7. Card templates (visual designs)~~ ✓
+### ~~6. Card templates (visual designs)~~ ✓
 A "template" means a completely different card layout and visual design — not a content preset. Each template is a distinct Vue component receiving the same `ItemCard` props.
 
 Shipped template set:
@@ -56,30 +48,38 @@ Shipped template set:
 
 The selected template is stored per-card and serialised to `cards.json` as a `template` field. A "Card template" dropdown sits at the top of the editor and updates the preview in real time. The grid shows the template name next to the type line for non-standard cards.
 
-### 8. Two-sided card template *(client request)*
-A special template variant where the card has two faces:
-- **Front** — full-bleed artwork only (item name optional as an overlay)
-- **Back** — description, stats, type line, footer; no large artwork (thumbnail or icon only)
+### ~~7. Two-sided card template~~ ✓ *(client request)*
+A template with two faces toggled by a flip button on the right edge of the card:
+- **Back** (default) — minimalist text layout on a clean white background; name, type line, description, footer; no background texture
+- **Front** (flipped) — full-bleed artwork cover with a gradient overlay at the bottom showing the item name and type line
 
-The PNG export for a two-sided card produces **two separate files** (`{name}-front.png` and `{name}-back.png`) so they can be sent to a print-on-demand service.
-
-The editor gains a face-toggle (Front / Back) when this template is active.
-
-### 9. Import / export collection as JSON
-Allow the user to export their entire `cards.json` (and optionally a zip that bundles the art files) as a backup or for sharing. Import reads a previously exported file and merges or replaces the local collection. Critical for moving a campaign between machines.
+The flip button is a circular burgundy tab on the right edge of the card; hidden from print output. On print, only the back (text) face is rendered. Two-file PNG export (`{name}-front.png` / `{name}-back.png`) is deferred to the print sheet milestone.
 
 ---
 
 ## v1.1 — Quality of life updates
 
-### 10. Print sheet (multi-card export)
+### 8. Print sheet (multi-card export)
 Select multiple cards from the grid and export them as a single printable PDF or PNG sheet — typically 3×3 cards at standard poker card size (63×88 mm). Useful for physical printing before a session.
 
-### 11. Tags / custom categories
+### 9. Tags / custom categories
 A freeform tag system (e.g. `Session 3`, `Boss Loot`, `Shop Inventory`) attached to each card. Tags are filterable in the grid. Separate from rarity and type line — purely for the user's own organisation.
 
-### 12. Drag-to-reorder in the grid
+### 10. Drag-to-reorder in the grid
 Reorder cards in the grid by dragging. Order is persisted to `cards.json` via an `order` field (or array index). Useful for grouping cards by session or encounter without needing tags.
+
+---
+
+## Future — Requires server infrastructure
+
+Features held until a backend service exists, since they depend on external data or cross-machine sync that a local-only app can't reasonably bundle.
+
+### SRD item browser
+Browse and import official D&D 5e SRD items directly into the editor. Requires a server-side API (or a very large bundled dataset that is impractical to ship locally). When implemented, will allow:
+- Browsing / searching all official items
+- Loading an item as-is or as a starting point for a custom edit
+
+Deferred because the full SRD item list is too large to bundle as a local JSON file and there is no standard interchange format worth supporting at this stage.
 
 ---
 
@@ -100,5 +100,6 @@ Reorder cards in the grid by dragging. Order is persisted to `cards.json` via an
 |---|---|---|
 | **Pre-beta** | ✅ Shipped | Delete, unsaved-changes guard, new/editing indicator, empty grid state |
 | **Beta** | ✅ Shipped | Rich text description, search/filter, duplicate, rarity on preview |
-| **v1.0** | Planned | SRD browser, card templates ✓, two-sided template, JSON import/export |
+| **v1.0** | ✅ Shipped | Item effects, card templates (Standard / Minimalist / Scroll / Two-sided) |
 | **v1.1** | Planned | Print sheet, tags, drag-to-reorder |
+| **Future** | Deferred | SRD browser (needs server) |
