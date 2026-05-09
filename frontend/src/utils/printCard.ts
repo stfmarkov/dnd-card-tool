@@ -3,7 +3,6 @@ import { toBlob } from 'html-to-image';
 import { toValidFileName } from './toValidFileName';
 import { SaveCardPNG } from '../../wailsjs/go/main/App';
 
-const URL_IN_CSS = /url\((['"]?)([^'")]+)\1\)/g;
 
 const HTML_TO_IMAGE_OPTS = {
     skipFonts: true as const,
@@ -154,55 +153,75 @@ const anySrcToPngDataUrl = async (src: string): Promise<string> => {
     return urlToPngDataUrl(resolveCssUrl(t));
 };
 
-const rasterizeInlineStyleUrls = async (
-    el: HTMLElement,
-    touchStyle: (e: HTMLElement) => void,
-): Promise<void> => {
-    const attr = el.getAttribute('style');
-    if (!attr || !attr.includes('url(')) {
-        return;
-    }
-    const matches = [...attr.matchAll(URL_IN_CSS)];
-    if (matches.length === 0) {
-        return;
-    }
-    let next = attr;
-    let changed = false;
-    for (const m of matches) {
-        const raw = m[2].trim();
-        if (!raw || raw === 'none') {
-            continue;
+
+/**
+ * html-to-image renders a flat 2D snapshot and doesn't honour CSS 3D transforms or
+ * backface-visibility. For the two-sided card both faces are position:absolute and the
+ * art face (front, later in DOM order) would paint on top regardless of flip state.
+ * This function temporarily hides the inactive face and strips the 3-D transforms so
+ * the snapshot matches what the user actually sees.
+ */
+const prepareTwoSidedForExport = (root: HTMLElement): (() => void) => {
+    const inner = root.querySelector<HTMLElement>('.card-twosided__inner');
+    if (!inner) return () => {};
+
+    const isFlipped = inner.classList.contains('is-flipped');
+    const backFace = root.querySelector<HTMLElement>('.card-twosided__face--back');
+    const frontFace = root.querySelector<HTMLElement>('.card-twosided__face--front');
+
+    const saved = new Map<HTMLElement, Record<string, [string, string]>>();
+    const set = (el: HTMLElement, prop: string, val: string) => {
+        if (!saved.has(el)) saved.set(el, {});
+        saved.get(el)![prop] = [el.style.getPropertyValue(prop), el.style.getPropertyPriority(prop)];
+        el.style.setProperty(prop, val, 'important');
+    };
+
+    // Flatten the 3-D container so both faces sit in normal stacking order.
+    set(inner, 'transform', 'none');
+    set(inner, 'transform-style', 'flat');
+    set(inner, 'transition', 'none');
+
+    if (!isFlipped) {
+        // Text (back) face is active — hide the art face.
+        if (frontFace) set(frontFace, 'display', 'none');
+        if (backFace) {
+            set(backFace, 'position', 'static');
+            set(backFace, 'height', '100%');
+            set(backFace, 'backface-visibility', 'visible');
         }
-        const png = await anySrcToPngDataUrl(raw);
-        next = next.replace(m[0], `url("${png}")`);
-        changed = true;
+    } else {
+        // Art (front) face is active — hide the text face and remove its rotateY.
+        if (backFace) set(backFace, 'display', 'none');
+        if (frontFace) {
+            set(frontFace, 'transform', 'none');
+            set(frontFace, 'position', 'static');
+            set(frontFace, 'height', '100%');
+            set(frontFace, 'backface-visibility', 'visible');
+        }
     }
-    if (changed) {
-        touchStyle(el);
-        el.setAttribute('style', next);
-    }
+
+    return () => {
+        for (const [el, props] of saved) {
+            for (const [prop, [val, priority]] of Object.entries(props)) {
+                if (val) {
+                    el.style.setProperty(prop, val, priority);
+                } else {
+                    el.style.removeProperty(prop);
+                }
+            }
+        }
+    };
 };
 
 const prepareDomForCardExport = async (root: HTMLElement): Promise<() => void> => {
+    const restoreTwoSided = prepareTwoSidedForExport(root);
+
     const imgInitial = new Map<HTMLImageElement, string | null>();
     for (const img of Array.from(root.querySelectorAll<HTMLImageElement>('img'))) {
         imgInitial.set(img, img.getAttribute('src'));
     }
 
-    const styleInitial = new Map<HTMLElement, string | null>();
-    const touchStyle = (el: HTMLElement) => {
-        if (!styleInitial.has(el)) {
-            styleInitial.set(el, el.getAttribute('style'));
-        }
-    };
-
-    const elementsWithStyle = [root, ...Array.from(root.querySelectorAll<HTMLElement>('*'))];
-
     await awaitSubtreeImagesReady(root);
-
-    for (const el of elementsWithStyle) {
-        await rasterizeInlineStyleUrls(el, touchStyle);
-    }
 
     for (const img of Array.from(root.querySelectorAll<HTMLImageElement>('img'))) {
         const src = getExportImgSrc(img);
@@ -217,18 +236,12 @@ const prepareDomForCardExport = async (root: HTMLElement): Promise<() => void> =
     await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
 
     return () => {
+        restoreTwoSided();
         for (const [img, s] of imgInitial) {
             if (s === null) {
                 img.removeAttribute('src');
             } else {
                 img.setAttribute('src', s);
-            }
-        }
-        for (const [el, s] of styleInitial) {
-            if (s === null) {
-                el.removeAttribute('style');
-            } else {
-                el.setAttribute('style', s);
             }
         }
     };
