@@ -1,19 +1,33 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useCardData } from './composables/useCardData';
 
 const { name, typeLine, description, footerText, rarityClass, artSrc } = useCardData('card-twosided');
 const isFlipped = ref(false);
+const isLinux = ref(false);
+
+const isBackVisible = computed(() => !isLinux.value || !isFlipped.value);
+const isFrontVisible = computed(() => !isLinux.value || isFlipped.value);
+
+onMounted(() => {
+    const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
+    const platform = (
+        nav.userAgentData?.platform ||
+        navigator.platform ||
+        navigator.userAgent
+    ).toLowerCase();
+    isLinux.value = platform.includes('linux');
+});
 </script>
 
 <template>
-    <div class="card-twosided">
+    <div class="card-twosided" :class="{ 'card-twosided--linux': isLinux }">
 
         <div class="card-twosided__scene" role="article" aria-label="Item card preview">
             <div class="card-twosided__inner" :class="{ 'is-flipped': isFlipped }">
 
                 <!-- Back face (default): minimalist text layout, no background -->
-                <div class="card-twosided__face card-twosided__face--back">
+                <div class="card-twosided__face card-twosided__face--back" :class="{ 'is-visible': isBackVisible, 'is-hidden': !isBackVisible }">
                     <header class="ctd-back__header">
                         <h2 class="ctd-back__title">{{ name }}</h2>
                         <div class="ctd-back__rule" aria-hidden="true" />
@@ -32,7 +46,7 @@ const isFlipped = ref(false);
                 </div>
 
                 <!-- Front face (flipped): full-bleed art with name overlay -->
-                <div class="card-twosided__face card-twosided__face--front">
+                <div class="card-twosided__face card-twosided__face--front" :class="{ 'is-visible': isFrontVisible, 'is-hidden': !isFrontVisible }">
                     <img :src="artSrc" alt="" class="ctd-front__art" />
                     <div class="ctd-front__overlay">
                         <p class="ctd-front__type-line" :class="rarityClass">{{ typeLine }}</p>
@@ -192,6 +206,36 @@ const isFlipped = ref(false);
 .card-twosided__face--front {
     background: #111;
     transform: rotateY(180deg);
+}
+
+/* Linux fallback: avoid 3-D flip rendering artifacts */
+.card-twosided--linux .card-twosided__scene {
+    perspective: none;
+}
+
+.card-twosided--linux .card-twosided__inner {
+    transform: none !important;
+    transform-style: flat;
+}
+
+.card-twosided--linux .card-twosided__face {
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+    transition: opacity 0.22s ease;
+}
+
+.card-twosided--linux .card-twosided__face--front {
+    transform: none;
+}
+
+.card-twosided--linux .card-twosided__face.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.card-twosided--linux .card-twosided__face.is-hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .ctd-front__art {
