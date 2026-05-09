@@ -4,7 +4,10 @@ const { name, typeLine, description, footerText, rarity, rarityClass, artSrc } =
 </script>
 
 <template>
-    <div class="card-minimalist" :style="{ backgroundImage: `url(${artSrc})` }" role="article" aria-label="Item card preview">
+    <div class="card-minimalist" role="article" aria-label="Item card preview">
+        <div class="card-minimalist__art">
+            <img :src="artSrc" alt="" class="card-minimalist__art-img" width="280" height="280" />
+        </div>
         <header class="card-minimalist__header">
             <h2 class="card-minimalist__title">{{ name }}</h2>
             <div class="card-minimalist__rule" aria-hidden="true" />
@@ -39,15 +42,29 @@ const { name, typeLine, description, footerText, rarity, rarityClass, artSrc } =
     overflow: hidden;
     container-type: inline-size;
     padding: var(--ds-space-4) var(--ds-space-4) var(--ds-space-3);
-    background-image: url('../../../assets/images/minimalist-bg.svg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: rgba(250, 246, 239, 0.9);
-    background-blend-mode: lighten;
+    position: relative;
+}
+
+.card-minimalist__art {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.1;
+}
+.card-minimalist__art-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .card-minimalist__header {
+    position: relative;
+    z-index: 1;
     flex-shrink: 0;
     text-align: center;
     padding-bottom: var(--ds-space-2);
@@ -87,6 +104,8 @@ const { name, typeLine, description, footerText, rarity, rarityClass, artSrc } =
 .card-minimalist__type-line--artifact   { color: var(--ds-tint-artifact); }
 
 .card-minimalist__body {
+    position: relative;
+    z-index: 1;
     flex: 1 1 0;
     min-height: 0;
     display: flex;
@@ -124,6 +143,8 @@ const { name, typeLine, description, footerText, rarity, rarityClass, artSrc } =
 }
 
 .card-minimalist__footer {
+    position: relative;
+    z-index: 1;
     flex-shrink: 0;
     padding-top: var(--ds-space-2);
     border-top: 1px solid rgba(26, 18, 13, 0.12);
