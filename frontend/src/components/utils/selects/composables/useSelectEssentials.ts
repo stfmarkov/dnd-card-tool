@@ -17,8 +17,8 @@ export const useSelectEssentials = (props: SelectProps, emit: SelectEmit) => {
         }
     });
 
-    const id = computed(() =>
-        props.label.toLowerCase().replace(/\s+/g, '-')
+    const id = computed(() => 
+        props.label ? props.label.toLowerCase().replace(/\s+/g, '-') : undefined
     );
 
     return {
