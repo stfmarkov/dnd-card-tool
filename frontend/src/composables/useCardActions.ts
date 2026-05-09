@@ -39,11 +39,29 @@ export const useCardActions = () => {
     }
 
     const saveCard = async () => {
-        try {
-            await itemCardStore.saveCard();
-            generalStore.setToast({ title: 'Card saved', message: 'Card saved successfully', type: 'success' })
-        } catch (e) {
-            generalStore.setToast({ title: 'Save failed', message: String(e), type: 'error' })
+        const execute = async () => {
+            try {
+                await itemCardStore.saveCard();
+                generalStore.setToast({ title: 'Card saved', message: 'Card saved successfully', type: 'success' })
+            } catch (e) {
+                generalStore.setToast({ title: 'Save failed', message: String(e), type: 'error' })
+            }
+        }
+
+        const isNew = !itemCardStore.id;
+        if (!isNew) {
+            execute();
+        } else {
+            confirmationStore.setConfirmation({
+                title: 'New card',
+                message: 'Are you sure you want to create a new card?',
+                onConfirm: execute,
+                onCancel: () => { },
+                type: 'warning',
+                show: true,
+                confirmText: 'Create new card',
+                cancelText: 'Cancel',
+            });
         }
     }
 

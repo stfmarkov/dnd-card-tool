@@ -27,10 +27,10 @@ const toMainView = () => {
         <ButtonIcon class="navigation-menu__main" @click="toggleMenu">
             <IconsHamburger />
         </ButtonIcon>
-        <ButtonIcon class="navigation-menu__right-button" title="Grid view" @click="toGridView">
+        <ButtonIcon class="navigation-menu__right-button" title="Search" @click="toGridView">
             <IconsGrid />
         </ButtonIcon>
-        <ButtonIcon class="navigation-menu__bottom-button" title="Split view" @click="toMainView">
+        <ButtonIcon class="navigation-menu__bottom-button" title="Editor" @click="toMainView">
             <IconsSplit direction="horizontal" />
         </ButtonIcon>
     </div>

@@ -27,6 +27,7 @@ const props = defineProps<{
     box-shadow: 8px 0 24px rgba(0, 0, 0, 0.35), 2px 0 6px rgba(0, 0, 0, 0.25);
     white-space: nowrap;
     pointer-events: none;
+    z-index: 1001;
 }
 .tooltip--visible {
     opacity: 1;

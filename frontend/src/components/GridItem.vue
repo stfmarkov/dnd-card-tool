@@ -43,7 +43,7 @@ const handleItemClick = (value: string) => {
 </script>
 
 <template>
-    <article class="grid-card" :data-rarity="rarityLabel" role="listitem">
+    <article class="grid-card" :data-rarity="rarityLabel" role="listitem" @click="handleItemClick('edit')">
         <div class="grid-card__frame">
             <img class="grid-card__img" :src="artSrc" alt="" loading="lazy" />
         </div>
