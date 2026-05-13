@@ -54,12 +54,12 @@ export const useCardActions = () => {
         } else {
             confirmationStore.setConfirmation({
                 title: 'New card',
-                message: 'Are you sure you want to create a new card?',
+                message: 'Are you sure you want to continue? This action will create a card',
                 onConfirm: execute,
                 onCancel: () => { },
                 type: 'warning',
                 show: true,
-                confirmText: 'Create new card',
+                confirmText: 'Save card',
                 cancelText: 'Cancel',
             });
         }

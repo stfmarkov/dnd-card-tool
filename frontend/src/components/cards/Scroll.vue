@@ -242,7 +242,7 @@ const { name, typeLine, description, footerText, rarity, rarityClass, artSrc } =
 .card-scroll__description {
     flex: 1 1 auto;
     min-height: 0;
-    overflow: auto;
+    overflow: hidden;
     hyphens: auto;
     -webkit-font-smoothing: antialiased;
 }
