@@ -56,7 +56,7 @@ jobs:
             cd frontend && npm install && cd ..
           fi
           
-          wails build -platform ${{ matrix.platform }}/amd64
+          wails build -platform ${{ matrix.platform }}/amd64 ${{ matrix.flags }}
 
       - name: Rename Binary for Clarity
         shell: bash
