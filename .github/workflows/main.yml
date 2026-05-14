@@ -14,6 +14,7 @@ jobs:
           - os: ubuntu-latest
             platform: linux
             output: wails-app-linux
+            flags: "-tags webkit2_41" 
           - os: windows-latest
             platform: windows
             output: wails-app-windows.exe
