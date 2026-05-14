@@ -1,41 +1,40 @@
-name: Wails build
+name: Wails Build
 
-on:
-  push:
-    tags:
-    # Match any new tag
-      - 'v*'
-
-env:
-  # Necessary for most environments as build failure can occur due to OOM issues
-  NODE_OPTIONS: "--max-old-space-size=4096"
+on: [push] # Runs on every single push to your code
 
 jobs:
   build:
     strategy:
-    # Failure in one platform build won't impact the others
-      fail-fast: false
       matrix:
-        build:
-          - name: 'App'
-            platform:  'linux/amd64'
-            os: 'ubuntu-latest'
-          - name: 'App'
-            platform:  'windows/amd64'
-            os: 'windows-latest'
+        os: [ubuntu-latest, windows-latest]
 
-    runs-on: ${{ matrix.build.os }}
+    runs-on: ${{ matrix.os }}
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Build wails
-        uses: dAppServer/wails-build-action@v2.2
-        id: build
+      - name: Setup Go and Node
+        uses: actions/setup-go@v5
         with:
-          build-name: ${{ matrix.build.name }}
-          build-platform: ${{ matrix.build.platform }}
-          package: false
-          go-version: '1.20'
+          go-version: 'stable'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install Linux Dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
+
+      - name: Install Wails & Build
+        run: |
+          go install github.com
+          wails build
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wails-build-${{ matrix.os }}
+          path: build/bin/
