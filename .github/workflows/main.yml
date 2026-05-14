@@ -13,11 +13,11 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: linux
-            output: wails-app-linux
+            output: item-cards
             flags: "-tags webkit2_41" 
           - os: windows-latest
             platform: windows
-            output: wails-app-windows.exe
+            output: item-cards.exe
 
     runs-on: ${{ matrix.os }}
 
